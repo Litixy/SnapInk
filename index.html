@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SnapInk | Litixy — AIアシスト線画補正ツール</title>
+<style>
+  :root{
+    --bg-deep:#14171c;
+    --bg-panel:#1b1f26;
+    --bg-elevated:#242933;
+    --bg-elevated-hover:#2c323e;
+    --line-subtle:#333a46;
+    --line-strong:#454e5e;
+    --paper:#e7e9ee;
+    --paper-checker:#d7dae0;
+    --ink-teal:#2f9e8f;
+    --ink-teal-dim:#21756a;
+    --ink-copper:#d68a4c;
+    --text-primary:#e9ebf0;
+    --text-muted:#8d95a5;
+    --text-faint:#5b6373;
+    --danger:#d16b6b;
+    --radius-sm:6px;
+    --radius-md:10px;
+    --shadow-float:0 10px 28px rgba(0,0,0,0.4);
+    --font-ui:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic UI","Yu Gothic",Meiryo,sans-serif;
+    --font-brand:"Palatino Linotype","Book Antiqua",Georgia,"Times New Roman",serif;
+  }
+  *,*::before,*::after{ box-sizing:border-box; }
+  html,body{ height:100%; margin:0; }
+  body{
+    font-family:var(--font-ui);
+    background:var(--bg-deep);
+    color:var(--text-primary);
+    -webkit-font-smoothing:antialiased;
+  }
+  button, input{ font-family:inherit; color:inherit; }
+  :focus-visible{ outline:2px solid var(--ink-teal); outline-offset:2px; }
+
+  .app{
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+  }
+
+  /* ---------- header ---------- */
+  .app-header{
+    flex-shrink:0;
+    height:58px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 20px;
+    background:var(--bg-panel);
+    border-bottom:1px solid var(--line-subtle);
+  }
+  .brand{ display:flex; align-items:center; gap:11px; }
+  .brand-mark{
+    width:32px; height:32px; border-radius:8px;
+    background:var(--ink-teal);
+    color:#0d1613;
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--font-brand); font-weight:700; font-size:17px;
+  }
+  .brand-text strong{
+    font-family:var(--font-brand);
+    font-size:19px; letter-spacing:0.3px; font-weight:700;
+    display:block; line-height:1.1;
+  }
+  .brand-text small{
+    display:block; color:var(--text-muted); font-size:11px; margin-top:2px;
+  }
+  .maker-credit{ color:var(--text-faint); font-size:12.5px; }
+  .maker-credit b{ color:var(--text-muted); font-weight:600; }
+
+  /* ---------- workspace layout ---------- */
+  .workspace{ flex:1; min-height:0; display:flex; }
+
+  .panel{
+    flex-shrink:0;
+    background:var(--bg-panel);
+    padding:18px 16px 22px;
+    overflow-y:auto;
+    display:flex;
+    flex-direction:column;
+    gap:22px;
+  }
+  .panel-left{ width:240px; border-right:1px solid var(--line-subtle); }
+  .panel-right{ width:270px; border-left:1px solid var(--line-subtle); }
+
+  .panel-section h2{
+    font-size:13px; font-weight:600; color:var(--text-muted);
+    margin:0 0 12px; padding-bottom:8px;
+    border-bottom:1px solid var(--line-subtle);
+  }
+
+  .row{ display:flex; align-items:center; justify-content:space-between; }
+  .field-label{ font-size:13px; color:var(--text-muted); }
+  .value-label{ font-size:12.5px; color:var(--text-primary); font-variant-numeric:tabular-nums; }
+
+  /* ---------- tool buttons ---------- */
+  .tool-row{ display:flex; gap:8px; }
+  .tool-btn{
+    flex:1; padding:10px 6px; display:flex; flex-direction:column; align-items:center; gap:6px;
+    background:var(--bg-elevated); border:1px solid var(--line-subtle); border-radius:var(--radius-sm);
+    cursor:pointer; font-size:12px; transition:background .15s, border-color .15s, color .15s;
+  }
+  .tool-btn:hover{ background:var(--bg-elevated-hover); }
+  .tool-btn.active{ border-color:var(--ink-teal); background:rgba(47,158,143,0.14); color:var(--ink-teal); }
+
+  /* ---------- color / width ---------- */
+  .color-field{ display:flex; align-items:center; gap:10px; }
+  input[type="color"]{
+    width:40px; height:34px; padding:2px; border:1px solid var(--line-subtle);
+    border-radius:var(--radius-sm); background:none; cursor:pointer;
+  }
+  .hex-label{ font-size:12px; color:var(--text-muted); font-variant-numeric:tabular-nums; }
+
+  input[type="range"]{
+    -webkit-appearance:none; appearance:none; height:4px; background:var(--line-strong);
+    border-radius:2px; outline:none;
+  }
+  input[type="range"]::-webkit-slider-thumb{
+    -webkit-appearance:none; width:16px; height:16px; border-radius:50%;
+    background:var(--ink-teal); border:2px solid var(--bg-panel); cursor:pointer;
+    box-shadow:0 0 0 1px var(--ink-teal);
+  }
+  input[type="range"]::-moz-range-thumb{
+    width:14px; height:14px; border-radius:50%; background:var(--ink-teal);
+    border:2px solid var(--bg-panel); cursor:pointer;
+  }
+  .width-row{ display:flex; align-items:center; gap:12px; margin-top:10px; }
+  .width-row input[type="range"]{ flex:1; }
+  .width-preview-wrap{
+    width:40px; height:40px; flex-shrink:0; display:flex; align-items:center; justify-content:center;
+    border:1px solid var(--line-subtle); border-radius:var(--radius-sm); background:var(--bg-elevated);
+  }
+  .width-preview{ border-radius:50%; background:#1a1a1a; }
+
+  /* ---------- layers ---------- */
+  .layer-list{ display:flex; flex-direction:column; gap:8px; }
+  .layer-item{
+    display:flex; align-items:center; gap:10px; padding:9px 10px;
+    background:var(--bg-elevated); border:1px solid var(--line-subtle); border-radius:var(--radius-sm);
+    cursor:pointer; transition:background .15s, border-color .15s;
+  }
+  .layer-item:hover{ background:var(--bg-elevated-hover); }
+  .layer-item.active{ border-color:var(--ink-teal); background:rgba(47,158,143,0.12); }
+  .layer-item .layer-name{ flex:1; font-size:13.5px; }
+  .layer-item .layer-hint{ display:block; font-size:11px; color:var(--text-faint); margin-top:1px; }
+  .layer-vis-btn{
+    width:28px; height:28px; flex-shrink:0; display:flex; align-items:center; justify-content:center;
+    border:none; background:transparent; color:var(--text-muted); border-radius:6px; cursor:pointer;
+  }
+  .layer-vis-btn:hover{ background:var(--bg-elevated-hover); color:var(--text-primary); }
+  .layer-vis-btn.hidden-icon svg{ opacity:.35; }
+
+  /* ---------- generic buttons ---------- */
+  .btn{
+    width:100%; padding:10px 14px; display:flex; align-items:center; justify-content:center; gap:8px;
+    background:var(--bg-elevated); border:1px solid var(--line-subtle); border-radius:var(--radius-sm);
+    color:var(--text-primary); font-size:13.5px; cursor:pointer; transition:background .15s, border-color .15s;
+  }
+  .btn:hover{ background:var(--bg-elevated-hover); }
+  .btn:disabled{ opacity:.4; cursor:not-allowed; }
+  .btn:disabled:hover{ background:var(--bg-elevated); }
+  .btn-row{ display:flex; flex-direction:column; gap:8px; }
+  .btn.primary{ background:var(--ink-teal); border-color:var(--ink-teal); color:#0d1613; font-weight:600; }
+  .btn.primary:hover{ background:var(--ink-teal-dim); border-color:var(--ink-teal-dim); }
+  .btn.ghost-danger{ color:var(--danger); border-color:transparent; background:transparent; }
+  .btn.ghost-danger:hover{ background:rgba(209,107,107,0.12); }
+
+  /* ---------- canvas area ---------- */
+  .canvas-area{
+    flex:1; min-width:0; display:flex; align-items:center; justify-content:center; padding:30px;
+    background-color:var(--bg-deep);
+    background-image:radial-gradient(var(--line-subtle) 1px, transparent 1px);
+    background-size:22px 22px;
+    overflow:auto;
+  }
+  .canvas-stage{
+    position:relative;
+    width:min(100%, 1100px);
+    aspect-ratio:1100 / 720;
+    border-radius:4px;
+    box-shadow:var(--shadow-float);
+    overflow:hidden;
+    background-color:var(--paper);
+    background-image:
+      linear-gradient(45deg, var(--paper-checker) 25%, transparent 25%),
+      linear-gradient(-45deg, var(--paper-checker) 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, var(--paper-checker) 75%),
+      linear-gradient(-45deg, transparent 75%, var(--paper-checker) 75%);
+    background-size:20px 20px;
+    background-position:0 0, 0 10px, 10px -10px, -10px 0px;
+  }
+  .draw-layer{ position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
+  .draw-layer.hidden-layer{ display:none; }
+  #interaction{ pointer-events:auto; cursor:none; touch-action:none; }
+  .brush-cursor{
+    position:absolute; border-radius:50%; pointer-events:none; z-index:20;
+    transform:translate(-50%,-50%);
+    border:1.5px solid var(--ink-teal);
+    box-shadow:0 0 0 1px rgba(255,255,255,0.85);
+    display:none;
+  }
+  .brush-cursor.eraser-cursor{
+    border:1.5px dashed var(--text-muted);
+    background:rgba(255,255,255,0.25);
+  }
+
+  /* ---------- reference panel ---------- */
+  .reference-frame{
+    aspect-ratio:4 / 3; border:1px dashed var(--line-strong); border-radius:var(--radius-sm);
+    background:var(--bg-elevated); position:relative; overflow:hidden;
+    display:flex; align-items:center; justify-content:center; margin-bottom:10px;
+  }
+  .reference-frame img{ width:100%; height:100%; object-fit:contain; display:none; }
+  .reference-frame .ref-placeholder{
+    color:var(--text-faint); font-size:12px; text-align:center; padding:14px; line-height:1.7;
+  }
+  .ref-filename{
+    display:block; font-size:11.5px; color:var(--text-muted); margin-bottom:10px;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+
+  /* ---------- settings / toggle switch ---------- */
+  .switch-row{ display:flex; align-items:flex-start; justify-content:space-between; gap:14px; }
+  .switch-label strong{ display:block; font-size:13.5px; }
+  .switch-label small{ display:block; color:var(--text-muted); font-size:11.5px; line-height:1.6; margin-top:4px; }
+  .switch{ position:relative; width:42px; height:24px; flex-shrink:0; margin-top:2px; }
+  .switch input{ opacity:0; width:0; height:0; position:absolute; }
+  .slider-track{
+    position:absolute; inset:0; background:var(--line-strong); border-radius:999px; cursor:pointer; transition:.2s;
+  }
+  .slider-track::before{
+    content:""; position:absolute; width:18px; height:18px; left:3px; top:3px;
+    background:#fff; border-radius:50%; transition:.2s;
+  }
+  .switch input:checked + .slider-track{ background:var(--ink-teal); }
+  .switch input:checked + .slider-track::before{ transform:translateX(18px); }
+
+  .strength-block{ margin-top:14px; padding-top:14px; border-top:1px solid var(--line-subtle); }
+  .strength-block.is-hidden{ display:none; }
+  .row-labels{ display:flex; justify-content:space-between; font-size:10.5px; color:var(--text-faint); margin-top:4px; }
+  .smooth-status{
+    margin-top:14px; padding-top:12px; border-top:1px solid var(--line-subtle);
+    font-size:11.5px; color:var(--text-muted); line-height:1.6; min-height:32px;
+  }
+
+  /* ---------- icons ---------- */
+  svg.icon{ display:block; }
+
+  /* ---------- responsive fallback ---------- */
+  @media (max-width: 900px){
+    .workspace{ flex-direction:column; overflow-y:auto; }
+    .panel-left, .panel-right{
+      width:100%; border:none; border-bottom:1px solid var(--line-subtle);
+      flex-direction:row; flex-wrap:wrap; gap:16px 20px;
+    }
+    .panel-section{ min-width:220px; flex:1; }
+    .canvas-area{ padding:18px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ transition:none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="app-header">
+    <div class="brand">
+      <div class="brand-mark">S</div>
+      <div class="brand-text">
+        <strong>SnapInk</strong>
+        <small>AIアシスト線画補正ツール</small>
+      </div>
+    </div>
+    <div class="maker-credit">開発元 <b>Litixy</b></div>
+  </header>
+
+  <div class="workspace">
+
+    <!-- ============ 左パネル：ツール ============ -->
+    <aside class="panel panel-left">
+
+      <div class="panel-section">
+        <h2>ツール</h2>
+        <div class="tool-row">
+          <button type="button" class="tool-btn active" data-tool="pen" title="ペン">
+            <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14.5 3.5 L20.5 9.5 L9 21 L3 21 L3 15 Z"/>
+              <path d="M12.3 5.7 L18.3 11.7"/>
+            </svg>
+            <span>ペン</span>
+          </button>
+          <button type="button" class="tool-btn" data-tool="eraser" title="消しゴム">
+            <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 13 L9 22 L3 22 L3 16 L13 6 Z"/>
+              <path d="M13 6 L18 11"/>
+              <path d="M3 22 L9 22"/>
+            </svg>
+            <span>消しゴム</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="panel-section">
+        <h2>カラーと線の太さ</h2>
+        <div class="row" style="margin-bottom:12px;">
+          <label class="field-label" for="colorInput">カラー</label>
+          <div class="color-field">
+            <input type="color" id="colorInput" value="#1a1a1a">
+            <span class="hex-label" id="colorHexLabel">#1a1a1a</span>
+          </div>
+        </div>
+        <div class="row">
+          <label class="field-label" for="widthInput">線の太さ</label>
+          <span class="value-label" id="widthValueLabel">4px</span>
+        </div>
+        <div class="width-row">
+          <input type="range" id="widthInput" min="1" max="60" value="4" step="1">
+          <div class="width-preview-wrap"><div class="width-preview" id="widthPreview"></div></div>
+        </div>
+      </div>
+
+      <div class="panel-section">
+        <h2>レイヤー</h2>
+        <div class="layer-list">
+          <div class="layer-item active" data-layer="line">
+            <div class="layer-name">線画
+              <span class="layer-hint">アウトラインを描くレイヤー</span>
+            </div>
+            <button type="button" class="layer-vis-btn" data-layer="line" aria-label="線画レイヤーの表示切り替え" title="表示 / 非表示">
+              <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 12 C4.5 6.5 9 4 12 4 C15 4 19.5 6.5 22 12 C19.5 17.5 15 20 12 20 C9 20 4.5 17.5 2 12 Z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+            </button>
+          </div>
+          <div class="layer-item" data-layer="base">
+            <div class="layer-name">下塗り
+              <span class="layer-hint">色を置くレイヤー</span>
+            </div>
+            <button type="button" class="layer-vis-btn" data-layer="base" aria-label="下塗りレイヤーの表示切り替え" title="表示 / 非表示">
+              <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 12 C4.5 6.5 9 4 12 4 C15 4 19.5 6.5 22 12 C19.5 17.5 15 20 12 20 C9 20 4.5 17.5 2 12 Z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-section">
+        <h2>操作</h2>
+        <div class="btn-row">
+          <button type="button" class="btn" id="undoBtn" disabled>
+            <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M7 7 L3 11 L7 15"/>
+              <path d="M3 11 H14 C18 11 21 14 21 18"/>
+            </svg>
+            元に戻す
+          </button>
+          <button type="button" class="btn ghost-danger" id="clearBtn">
+            <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 7 H20"/>
+              <path d="M9 7 V4 H15 V7"/>
+              <path d="M6 7 L7 21 H17 L18 7"/>
+            </svg>
+            レイヤーを消去
+          </button>
+        </div>
+      </div>
+
+      <div class="panel-section" style="margin-top:auto;">
+        <h2>書き出し</h2>
+        <button type="button" class="btn primary" id="saveBtn">
+          <svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3 V15"/>
+            <path d="M7 10 L12 15 L17 10"/>
+            <path d="M4 19 H20"/>
+          </svg>
+          PNGを書き出す
+        </button>
+      </div>
+
+    </aside>
+
+    <!-- ============ 中央：メインキャンバス ============ -->
+    <main class="canvas-area">
+      <div class="canvas-stage" id="canvasStage">
+        <canvas id="layer-base" class="draw-layer"></canvas>
+        <canvas id="layer-line" class="draw-layer"></canvas>
+        <canvas id="interaction" class="draw-layer"></canvas>
+        <div class="brush-cursor" id="brushCursor"></div>
+      </div>
+    </main>
+
+    <!-- ============ 右パネル：参照画像 & 設定 ============ -->
+    <aside class="panel panel-right">
+
+      <div class="panel-section">
+        <h2>参照画像</h2>
+        <div class="reference-frame" id="referenceFrame">
+          <img id="refImage" alt="読み込んだ参照画像">
+          <div class="ref-placeholder" id="refPlaceholder">参照用の画像はまだありません。<br>読み込むとここに表示されます。</div>
+        </div>
+        <span class="ref-filename" id="refFileName"></span>
+        <div class="btn-row">
+          <button type="button" class="btn" id="refLoadBtn">
+            <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 16 V4"/>
+              <path d="M7 9 L12 4 L17 9"/>
+              <path d="M4 16 V19 H20 V16"/>
+            </svg>
+            画像を読み込む
+          </button>
+          <button type="button" class="btn ghost-danger" id="refClearBtn" disabled>参照を削除</button>
+        </div>
+        <input type="file" id="refInput" accept="image/*" style="display:none;">
+      </div>
+
+      <div class="panel-section">
+        <h2>AI補正設定</h2>
+        <div class="switch-row">
+          <div class="switch-label">
+            <strong>AIで線画を補正</strong>
+            <small>描画を終えると、手描きのストロークを自動でなめらかな線に整えます。</small>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="smoothToggle" checked>
+            <span class="slider-track"></span>
+          </label>
+        </div>
+
+        <div class="strength-block" id="strengthBlock">
+          <div class="row">
+            <label class="field-label" for="strengthInput">補正の強さ</label>
+            <span class="value-label" id="strengthValueLabel">40</span>
+          </div>
+          <input type="range" id="strengthInput" min="0" max="100" step="5" value="40" style="width:100%; margin-top:8px;">
+          <div class="row-labels"><span>弱め（形を保つ）</span><span>強め（なめらか）</span></div>
+        </div>
+
+        <div class="smooth-status" id="smoothStatus">まだ描画されていません。</div>
+      </div>
+
+    </aside>
+
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* =========================================================
+     初期設定
+  ========================================================= */
+  const CANVAS_W = 1100;
+  const CANVAS_H = 720;
+  const UNDO_LIMIT = 20;
+
+  const state = {
+    tool: "pen",
+    color: "#1a1a1a",
+    lineWidth: 4,
+    activeLayer: "line",
+    layers: {
+      base:{ visible:true },
+      line:{ visible:true }
+    },
+    smoothing:{
+      enabled:true,
+      strength:40
+    },
+    drawing:false,
+    currentStroke:[]
+  };
+
+  /* =========================================================
+     DOM参照
+  ========================================================= */
+  const stageEl = document.getElementById("canvasStage");
+  const canvasBase = document.getElementById("layer-base");
+  const canvasLine = document.getElementById("layer-line");
+  const interaction = document.getElementById("interaction");
+  const canvases = { base:canvasBase, line:canvasLine };
+
+  const ctxBase = canvasBase.getContext("2d");
+  const ctxLine = canvasLine.getContext("2d");
+  const ctxInteraction = interaction.getContext("2d");
+
+  const brushCursorEl = document.getElementById("brushCursor");
+
+  const colorInput = document.getElementById("colorInput");
+  const colorHexLabel = document.getElementById("colorHexLabel");
+  const widthInput = document.getElementById("widthInput");
+  const widthValueLabel = document.getElementById("widthValueLabel");
+  const widthPreview = document.getElementById("widthPreview");
+
+  const undoBtn = document.getElementById("undoBtn");
+  const clearBtn = document.getElementById("clearBtn");
+  const saveBtn = document.getElementById("saveBtn");
+
+  const refInput = document.getElementById("refInput");
+  const refLoadBtn = document.getElementById("refLoadBtn");
+  const refImage = document.getElementById("refImage");
+  const refPlaceholder = document.getElementById("refPlaceholder");
+  const refFileName = document.getElementById("refFileName");
+  const refClearBtn = document.getElementById("refClearBtn");
+
+  const smoothToggle = document.getElementById("smoothToggle");
+  const strengthBlock = document.getElementById("strengthBlock");
+  const strengthInput = document.getElementById("strengthInput");
+  const strengthValueLabel = document.getElementById("strengthValueLabel");
+  const smoothStatus = document.getElementById("smoothStatus");
+
+  const undoStacks = { base:[], line:[] };
+
+  /* =========================================================
+     初期化
+  ========================================================= */
+  function init(){
+    [canvasBase, canvasLine, interaction].forEach(function(c){
+      c.width = CANVAS_W;
+      c.height = CANVAS_H;
+    });
+    updateUndoButton();
+    updateWidthPreview();
+  }
+
+  /* =========================================================
+     座標変換
+  ========================================================= */
+  function getPos(evt){
+    const rect = interaction.getBoundingClientRect();
+    const scaleX = interaction.width / rect.width;
+    const scaleY = interaction.height / rect.height;
+    return {
+      x:(evt.clientX - rect.left) * scaleX,
+      y:(evt.clientY - rect.top) * scaleY
+    };
+  }
+
+  /* =========================================================
+     描画スタイル適用
+  ========================================================= */
+  function applyStrokeStyle(ctx){
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.lineWidth = state.lineWidth;
+    if (state.tool === "eraser"){
+      ctx.globalCompositeOperation = "destination-out";
+      ctx.strokeStyle = "rgba(0,0,0,1)";
+      ctx.fillStyle = "rgba(0,0,0,1)";
+    } else {
+      ctx.globalCompositeOperation = "source-over";
+      ctx.strokeStyle = state.color;
+      ctx.fillStyle = state.color;
+    }
+  }
+
+  function previewStyle(ctx){
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.lineWidth = state.lineWidth;
+    ctx.globalCompositeOperation = "source-over";
+    ctx.strokeStyle = (state.tool === "eraser") ? "rgba(140,140,140,0.55)" : state.color;
+  }
+
+  /* =========================================================
+     Undo管理
+  ========================================================= */
+  function activeCtx(){
+    return state.activeLayer === "base" ? ctxBase : ctxLine;
+  }
+
+  function pushUndo(layer){
+    const ctx = layer === "base" ? ctxBase : ctxLine;
+    const data = ctx.getImageData(0, 0, CANVAS_W, CANVAS_H);
+    const stack = undoStacks[layer];
+    stack.push(data);
+    if (stack.length > UNDO_LIMIT) stack.shift();
+    updateUndoButton();
+  }
+
+  function undo(){
+    const layer = state.activeLayer;
+    const stack = undoStacks[layer];
+    if (!stack.length) return;
+    const data = stack.pop();
+    const ctx = layer === "base" ? ctxBase : ctxLine;
+    ctx.putImageData(data, 0, 0);
+    updateUndoButton();
+  }
+
+  function updateUndoButton(){
+    undoBtn.disabled = undoStacks[state.activeLayer].length === 0;
+  }
+
+  /* =========================================================
+     ライブプレビュー（描画中）
+  ========================================================= */
+  function drawLivePreview(){
+    ctxInteraction.clearRect(0, 0, CANVAS_W, CANVAS_H);
+    const pts = state.currentStroke;
+    if (pts.length < 2) return;
+    previewStyle(ctxInteraction);
+    ctxInteraction.beginPath();
+    ctxInteraction.moveTo(pts[0].x, pts[0].y);
+    for (let i = 1; i < pts.length - 1; i++){
+      const mx = (pts[i].x + pts[i + 1].x) / 2;
+      const my = (pts[i].y + pts[i + 1].y) / 2;
+      ctxInteraction.quadraticCurveTo(pts[i].x, pts[i].y, mx, my);
+    }
+    ctxInteraction.lineTo(pts[pts.length - 1].x, pts[pts.length - 1].y);
+    ctxInteraction.stroke();
+  }
+
+  /* =========================================================
+     線画補正（コア機能）
+     Ramer-Douglas-Peucker で間引き → Catmull-Rom を
+     3次ベジエ曲線に変換して滑らかな輪郭線を描く
+  ========================================================= */
+  function strengthToTolerance(strength){
+    return 0.5 + (strength / 100) * 5.5;
+  }
+
+  function sqSegDist(p, p1, p2){
+    let x = p1.x, y = p1.y, dx = p2.x - x, dy = p2.y - y;
+    if (dx !== 0 || dy !== 0){
+      const t = ((p.x - x) * dx + (p.y - y) * dy) / (dx * dx + dy * dy);
+      if (t > 1){ x = p2.x; y = p2.y; }
+      else if (t > 0){ x += dx * t; y += dy * t; }
+    }
+    dx = p.x - x; dy = p.y - y;
+    return dx * dx + dy * dy;
+  }
+
+  function rdpStep(points, first, last, sqTolerance, out){
+    let maxDist = sqTolerance, index = -1;
+    for (let i = first + 1; i < last; i++){
+      const d = sqSegDist(points[i], points[first], points[last]);
+      if (d > maxDist){ index = i; maxDist = d; }
+    }
+    if (index > -1){
+      if (index - first > 1) rdpStep(points, first, index, sqTolerance, out);
+      out.push(points[index]);
+      if (last - index > 1) rdpStep(points, index, last, sqTolerance, out);
+    }
+  }
+
+  function simplifyPoints(points, tolerance){
+    if (points.length <= 2) return points.slice();
+    const sqTolerance = tolerance * tolerance;
+    const out = [points[0]];
+    rdpStep(points, 0, points.length - 1, sqTolerance, out);
+    out.push(points[points.length - 1]);
+    return out;
+  }
+
+  function catmullRomSegments(pts){
+    const segs = [];
+    for (let i = 0; i < pts.length - 1; i++){
+      const p0 = pts[i - 1] || pts[i];
+      const p1 = pts[i];
+      const p2 = pts[i + 1];
+      const p3 = pts[i + 2] || p2;
+      segs.push({
+        c1x:p1.x + (p2.x - p0.x) / 6,
+        c1y:p1.y + (p2.y - p0.y) / 6,
+        c2x:p2.x - (p3.x - p1.x) / 6,
+        c2y:p2.y - (p3.y - p1.y) / 6,
+        x:p2.x,
+        y:p2.y
+      });
+    }
+    return segs;
+  }
+
+  function updateSmoothStatus(beforeCount, afterCount, smoothed){
+    if (smoothed){
+      smoothStatus.textContent = "直前のストローク: " + beforeCount + "点 → " + afterCount + "点に補正（AIスムージングON）";
+    } else if (state.smoothing.enabled){
+      smoothStatus.textContent = "直前のストローク: " + beforeCount + "点（点数が少なく補正なし）";
+    } else {
+      smoothStatus.textContent = "直前のストローク: " + beforeCount + "点（補正OFF）";
+    }
+  }
+
+  /* =========================================================
+     ストローク確定処理
+  ========================================================= */
+  function commitDot(p){
+    const ctx = activeCtx();
+    applyStrokeStyle(ctx);
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, Math.max(state.lineWidth / 2, 0.6), 0, Math.PI * 2);
+    ctx.fill();
+    ctx.globalCompositeOperation = "source-over";
+    updateSmoothStatus(1, 1, false);
+  }
+
+  function commitStroke(rawPoints){
+    const ctx = activeCtx();
+    applyStrokeStyle(ctx);
+
+    let pathPoints = rawPoints;
+    let smoothed = false;
+
+    if (state.smoothing.enabled && rawPoints.length >= 3){
+      const tolerance = strengthToTolerance(state.smoothing.strength);
+      pathPoints = simplifyPoints(rawPoints, tolerance);
+      smoothed = pathPoints.length >= 3;
+    }
+
+    ctx.beginPath();
+    ctx.moveTo(pathPoints[0].x, pathPoints[0].y);
+    if (pathPoints.length === 2){
+      ctx.lineTo(pathPoints[1].x, pathPoints[1].y);
+    } else if (smoothed){
+      const segs = catmullRomSegments(pathPoints);
+      for (let i = 0; i < segs.length; i++){
+        const s = segs[i];
+        ctx.bezierCurveTo(s.c1x, s.c1y, s.c2x, s.c2y, s.x, s.y);
+      }
+    } else {
+      for (let i = 1; i < pathPoints.length; i++){
+        ctx.lineTo(pathPoints[i].x, pathPoints[i].y);
+      }
+    }
+    ctx.stroke();
+    ctx.globalCompositeOperation = "source-over";
+
+    updateSmoothStatus(rawPoints.length, pathPoints.length, smoothed);
+  }
+
+  /* =========================================================
+     ポインター入力（マウス／タッチ／ペン対応）
+  ========================================================= */
+  function onPointerDown(e){
+    if (e.pointerType === "mouse" && e.button !== 0) return;
+    interaction.setPointerCapture(e.pointerId);
+    pushUndo(state.activeLayer);
+    state.drawing = true;
+    const p = getPos(e);
+    state.currentStroke = [p];
+  }
+
+  function onPointerMove(e){
+    updateBrushCursor(e);
+    if (!state.drawing) return;
+    const p = getPos(e);
+    const last = state.currentStroke[state.currentStroke.length - 1];
+    if (Math.hypot(p.x - last.x, p.y - last.y) < 1) return;
+    state.currentStroke.push(p);
+    drawLivePreview();
+  }
+
+  function onPointerUp(e){
+    if (!state.drawing) return;
+    state.drawing = false;
+    try{ interaction.releasePointerCapture(e.pointerId); }catch(err){}
+    ctxInteraction.clearRect(0, 0, CANVAS_W, CANVAS_H);
+
+    const pts = state.currentStroke;
+    if (pts.length === 1){
+      commitDot(pts[0]);
+    } else if (pts.length > 1){
+      commitStroke(pts);
+    }
+    state.currentStroke = [];
+  }
+
+  function updateBrushCursor(e){
+    const stageRect = stageEl.getBoundingClientRect();
+    const interactionRect = interaction.getBoundingClientRect();
+    const displayScale = interactionRect.width / interaction.width;
+    const size = Math.max(state.lineWidth * displayScale, 4);
+    brushCursorEl.style.width = size + "px";
+    brushCursorEl.style.height = size + "px";
+    brushCursorEl.style.left = (e.clientX - stageRect.left) + "px";
+    brushCursorEl.style.top = (e.clientY - stageRect.top) + "px";
+  }
+
+  interaction.addEventListener("pointerdown", onPointerDown);
+  interaction.addEventListener("pointermove", onPointerMove);
+  window.addEventListener("pointerup", onPointerUp);
+  window.addEventListener("pointercancel", onPointerUp);
+  interaction.addEventListener("pointerenter", function(){ brushCursorEl.style.display = "block"; });
+  interaction.addEventListener("pointerleave", function(){ brushCursorEl.style.display = "none"; });
+
+  /* =========================================================
+     ツール切り替え
+  ========================================================= */
+  document.querySelectorAll(".tool-btn").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      document.querySelectorAll(".tool-btn").forEach(function(b){ b.classList.remove("active"); });
+      btn.classList.add("active");
+      state.tool = btn.dataset.tool;
+      brushCursorEl.classList.toggle("eraser-cursor", state.tool === "eraser");
+      updateWidthPreview();
+    });
+  });
+
+  /* =========================================================
+     カラー・線幅
+  ========================================================= */
+  function updateWidthPreview(){
+    const size = Math.min(state.lineWidth, 34);
+    widthPreview.style.width = size + "px";
+    widthPreview.style.height = size + "px";
+    if (state.tool === "eraser"){
+      widthPreview.style.background = "transparent";
+      widthPreview.style.border = "2px dashed var(--text-muted)";
+    } else {
+      widthPreview.style.background = state.color;
+      widthPreview.style.border = "none";
+    }
+  }
+
+  colorInput.addEventListener("input", function(e){
+    state.color = e.target.value;
+    colorHexLabel.textContent = e.target.value;
+    updateWidthPreview();
+  });
+
+  widthInput.addEventListener("input", function(e){
+    state.lineWidth = Number(e.target.value);
+    widthValueLabel.textContent = state.lineWidth + "px";
+    updateWidthPreview();
+  });
+
+  /* =========================================================
+     レイヤー切り替え・表示制御
+  ========================================================= */
+  document.querySelectorAll(".layer-item").forEach(function(item){
+    item.addEventListener("click", function(e){
+      if (e.target.closest(".layer-vis-btn")) return;
+      document.querySelectorAll(".layer-item").forEach(function(i){ i.classList.remove("active"); });
+      item.classList.add("active");
+      state.activeLayer = item.dataset.layer;
+      updateUndoButton();
+    });
+  });
+
+  document.querySelectorAll(".layer-vis-btn").forEach(function(btn){
+    btn.addEventListener("click", function(e){
+      e.stopPropagation();
+      const layer = btn.dataset.layer;
+      state.layers[layer].visible = !state.layers[layer].visible;
+      btn.classList.toggle("hidden-icon", !state.layers[layer].visible);
+      canvases[layer].classList.toggle("hidden-layer", !state.layers[layer].visible);
+    });
+  });
+
+  /* =========================================================
+     クリア・元に戻す・PNG書き出し
+  ========================================================= */
+  clearBtn.addEventListener("click", function(){
+    const layer = state.activeLayer;
+    const layerName = layer === "line" ? "線画" : "下塗り";
+    if (!window.confirm("「" + layerName + "」レイヤーの内容をすべて消去します。よろしいですか？")) return;
+    pushUndo(layer);
+    const ctx = layer === "base" ? ctxBase : ctxLine;
+    ctx.clearRect(0, 0, CANVAS_W, CANVAS_H);
+  });
+
+  undoBtn.addEventListener("click", undo);
+
+  saveBtn.addEventListener("click", function(){
+    const exportCanvas = document.createElement("canvas");
+    exportCanvas.width = CANVAS_W;
+    exportCanvas.height = CANVAS_H;
+    const ex = exportCanvas.getContext("2d");
+    if (state.layers.base.visible) ex.drawImage(canvasBase, 0, 0);
+    if (state.layers.line.visible) ex.drawImage(canvasLine, 0, 0);
+
+    const url = exportCanvas.toDataURL("image/png");
+    const stamp = new Date().toISOString().slice(0, 19).replace(/[:T]/g, "-");
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "snapink-" + stamp + ".png";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  });
+
+  /* =========================================================
+     参照画像パネル
+  ========================================================= */
+  refLoadBtn.addEventListener("click", function(){ refInput.click(); });
+
+  refInput.addEventListener("change", function(e){
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(ev){
+      refImage.src = ev.target.result;
+      refImage.style.display = "block";
+      refPlaceholder.style.display = "none";
+      refClearBtn.disabled = false;
+      refFileName.textContent = file.name;
+    };
+    reader.readAsDataURL(file);
+  });
+
+  refClearBtn.addEventListener("click", function(){
+    refImage.src = "";
+    refImage.style.display = "none";
+    refPlaceholder.style.display = "block";
+    refClearBtn.disabled = true;
+    refFileName.textContent = "";
+    refInput.value = "";
+  });
+
+  /* =========================================================
+     AI補正設定
+  ========================================================= */
+  smoothToggle.addEventListener("change", function(e){
+    state.smoothing.enabled = e.target.checked;
+    strengthBlock.classList.toggle("is-hidden", !state.smoothing.enabled);
+  });
+
+  strengthInput.addEventListener("input", function(e){
+    state.smoothing.strength = Number(e.target.value);
+    strengthValueLabel.textContent = String(state.smoothing.strength);
+  });
+
+  /* =========================================================
+     起動
+  ========================================================= */
+  init();
+
+})();
+</script>
+</body>
+</html>
