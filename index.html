@@ -1,460 +1,90 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SnapInk | Litixy — AIアシスト線画補正ツール</title>
-<style>
-  :root{
-    --bg-deep:#14171c;
-    --bg-panel:#1b1f26;
-    --bg-elevated:#242933;
-    --bg-elevated-hover:#2c323e;
-    --line-subtle:#333a46;
-    --line-strong:#454e5e;
-    --paper:#e7e9ee;
-    --paper-checker:#d7dae0;
-    --ink-teal:#2f9e8f;
-    --ink-teal-dim:#21756a;
-    --ink-copper:#d68a4c;
-    --text-primary:#e9ebf0;
-    --text-muted:#8d95a5;
-    --text-faint:#5b6373;
-    --danger:#d16b6b;
-    --radius-sm:6px;
-    --radius-md:10px;
-    --shadow-float:0 10px 28px rgba(0,0,0,0.4);
-    --font-ui:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic UI","Yu Gothic",Meiryo,sans-serif;
-    --font-brand:"Palatino Linotype","Book Antiqua",Georgia,"Times New Roman",serif;
-  }
-  *,*::before,*::after{ box-sizing:border-box; }
-  html,body{ height:100%; margin:0; }
-  body{
-    font-family:var(--font-ui);
-    background:var(--bg-deep);
-    color:var(--text-primary);
-    -webkit-font-smoothing:antialiased;
-  }
-  button, input{ font-family:inherit; color:inherit; }
-  :focus-visible{ outline:2px solid var(--ink-teal); outline-offset:2px; }
-
-  .app{
-    height:100vh;
-    display:flex;
-    flex-direction:column;
-    overflow:hidden;
-  }
-
-  /* ---------- header ---------- */
-  .app-header{
-    flex-shrink:0;
-    height:58px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:0 20px;
-    background:var(--bg-panel);
-    border-bottom:1px solid var(--line-subtle);
-  }
-  .brand{ display:flex; align-items:center; gap:11px; }
-  .brand-mark{
-    width:32px; height:32px; border-radius:8px;
-    background:var(--ink-teal);
-    color:#0d1613;
-    display:flex; align-items:center; justify-content:center;
-    font-family:var(--font-brand); font-weight:700; font-size:17px;
-  }
-  .brand-text strong{
-    font-family:var(--font-brand);
-    font-size:19px; letter-spacing:0.3px; font-weight:700;
-    display:block; line-height:1.1;
-  }
-  .brand-text small{
-    display:block; color:var(--text-muted); font-size:11px; margin-top:2px;
-  }
-  .maker-credit{ color:var(--text-faint); font-size:12.5px; }
-  .maker-credit b{ color:var(--text-muted); font-weight:600; }
-
-  /* ---------- workspace layout ---------- */
-  .workspace{ flex:1; min-height:0; display:flex; }
-
-  .panel{
-    flex-shrink:0;
-    background:var(--bg-panel);
-    padding:18px 16px 22px;
-    overflow-y:auto;
-    display:flex;
-    flex-direction:column;
-    gap:22px;
-  }
-  .panel-left{ width:240px; border-right:1px solid var(--line-subtle); }
-  .panel-right{ width:270px; border-left:1px solid var(--line-subtle); }
-
-  .panel-section h2{
-    font-size:13px; font-weight:600; color:var(--text-muted);
-    margin:0 0 12px; padding-bottom:8px;
-    border-bottom:1px solid var(--line-subtle);
-  }
-
-  .row{ display:flex; align-items:center; justify-content:space-between; }
-  .field-label{ font-size:13px; color:var(--text-muted); }
-  .value-label{ font-size:12.5px; color:var(--text-primary); font-variant-numeric:tabular-nums; }
-
-  /* ---------- tool buttons ---------- */
-  .tool-row{ display:flex; gap:8px; }
-  .tool-btn{
-    flex:1; padding:10px 6px; display:flex; flex-direction:column; align-items:center; gap:6px;
-    background:var(--bg-elevated); border:1px solid var(--line-subtle); border-radius:var(--radius-sm);
-    cursor:pointer; font-size:12px; transition:background .15s, border-color .15s, color .15s;
-  }
-  .tool-btn:hover{ background:var(--bg-elevated-hover); }
-  .tool-btn.active{ border-color:var(--ink-teal); background:rgba(47,158,143,0.14); color:var(--ink-teal); }
-
-  /* ---------- color / width ---------- */
-  .color-field{ display:flex; align-items:center; gap:10px; }
-  input[type="color"]{
-    width:40px; height:34px; padding:2px; border:1px solid var(--line-subtle);
-    border-radius:var(--radius-sm); background:none; cursor:pointer;
-  }
-  .hex-label{ font-size:12px; color:var(--text-muted); font-variant-numeric:tabular-nums; }
-
-  input[type="range"]{
-    -webkit-appearance:none; appearance:none; height:4px; background:var(--line-strong);
-    border-radius:2px; outline:none;
-  }
-  input[type="range"]::-webkit-slider-thumb{
-    -webkit-appearance:none; width:16px; height:16px; border-radius:50%;
-    background:var(--ink-teal); border:2px solid var(--bg-panel); cursor:pointer;
-    box-shadow:0 0 0 1px var(--ink-teal);
-  }
-  input[type="range"]::-moz-range-thumb{
-    width:14px; height:14px; border-radius:50%; background:var(--ink-teal);
-    border:2px solid var(--bg-panel); cursor:pointer;
-  }
-  .width-row{ display:flex; align-items:center; gap:12px; margin-top:10px; }
-  .width-row input[type="range"]{ flex:1; }
-  .width-preview-wrap{
-    width:40px; height:40px; flex-shrink:0; display:flex; align-items:center; justify-content:center;
-    border:1px solid var(--line-subtle); border-radius:var(--radius-sm); background:var(--bg-elevated);
-  }
-  .width-preview{ border-radius:50%; background:#1a1a1a; }
-
-  /* ---------- layers ---------- */
-  .layer-list{ display:flex; flex-direction:column; gap:8px; }
-  .layer-item{
-    display:flex; align-items:center; gap:10px; padding:9px 10px;
-    background:var(--bg-elevated); border:1px solid var(--line-subtle); border-radius:var(--radius-sm);
-    cursor:pointer; transition:background .15s, border-color .15s;
-  }
-  .layer-item:hover{ background:var(--bg-elevated-hover); }
-  .layer-item.active{ border-color:var(--ink-teal); background:rgba(47,158,143,0.12); }
-  .layer-item .layer-name{ flex:1; font-size:13.5px; }
-  .layer-item .layer-hint{ display:block; font-size:11px; color:var(--text-faint); margin-top:1px; }
-  .layer-vis-btn{
-    width:28px; height:28px; flex-shrink:0; display:flex; align-items:center; justify-content:center;
-    border:none; background:transparent; color:var(--text-muted); border-radius:6px; cursor:pointer;
-  }
-  .layer-vis-btn:hover{ background:var(--bg-elevated-hover); color:var(--text-primary); }
-  .layer-vis-btn.hidden-icon svg{ opacity:.35; }
-
-  /* ---------- generic buttons ---------- */
-  .btn{
-    width:100%; padding:10px 14px; display:flex; align-items:center; justify-content:center; gap:8px;
-    background:var(--bg-elevated); border:1px solid var(--line-subtle); border-radius:var(--radius-sm);
-    color:var(--text-primary); font-size:13.5px; cursor:pointer; transition:background .15s, border-color .15s;
-  }
-  .btn:hover{ background:var(--bg-elevated-hover); }
-  .btn:disabled{ opacity:.4; cursor:not-allowed; }
-  .btn:disabled:hover{ background:var(--bg-elevated); }
-  .btn-row{ display:flex; flex-direction:column; gap:8px; }
-  .btn.primary{ background:var(--ink-teal); border-color:var(--ink-teal); color:#0d1613; font-weight:600; }
-  .btn.primary:hover{ background:var(--ink-teal-dim); border-color:var(--ink-teal-dim); }
-  .btn.ghost-danger{ color:var(--danger); border-color:transparent; background:transparent; }
-  .btn.ghost-danger:hover{ background:rgba(209,107,107,0.12); }
-
-  /* ---------- canvas area ---------- */
-  .canvas-area{
-    flex:1; min-width:0; display:flex; align-items:center; justify-content:center; padding:30px;
-    background-color:var(--bg-deep);
-    background-image:radial-gradient(var(--line-subtle) 1px, transparent 1px);
-    background-size:22px 22px;
-    overflow:auto;
-  }
-  .canvas-stage{
-    position:relative;
-    width:min(100%, 1100px);
-    aspect-ratio:1100 / 720;
-    border-radius:4px;
-    box-shadow:var(--shadow-float);
-    overflow:hidden;
-    background-color:var(--paper);
-    background-image:
-      linear-gradient(45deg, var(--paper-checker) 25%, transparent 25%),
-      linear-gradient(-45deg, var(--paper-checker) 25%, transparent 25%),
-      linear-gradient(45deg, transparent 75%, var(--paper-checker) 75%),
-      linear-gradient(-45deg, transparent 75%, var(--paper-checker) 75%);
-    background-size:20px 20px;
-    background-position:0 0, 0 10px, 10px -10px, -10px 0px;
-  }
-  .draw-layer{ position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
-  .draw-layer.hidden-layer{ display:none; }
-  #interaction{ pointer-events:auto; cursor:none; touch-action:none; }
-  .brush-cursor{
-    position:absolute; border-radius:50%; pointer-events:none; z-index:20;
-    transform:translate(-50%,-50%);
-    border:1.5px solid var(--ink-teal);
-    box-shadow:0 0 0 1px rgba(255,255,255,0.85);
-    display:none;
-  }
-  .brush-cursor.eraser-cursor{
-    border:1.5px dashed var(--text-muted);
-    background:rgba(255,255,255,0.25);
-  }
-
-  /* ---------- reference panel ---------- */
-  .reference-frame{
-    aspect-ratio:4 / 3; border:1px dashed var(--line-strong); border-radius:var(--radius-sm);
-    background:var(--bg-elevated); position:relative; overflow:hidden;
-    display:flex; align-items:center; justify-content:center; margin-bottom:10px;
-  }
-  .reference-frame img{ width:100%; height:100%; object-fit:contain; display:none; }
-  .reference-frame .ref-placeholder{
-    color:var(--text-faint); font-size:12px; text-align:center; padding:14px; line-height:1.7;
-  }
-  .ref-filename{
-    display:block; font-size:11.5px; color:var(--text-muted); margin-bottom:10px;
-    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-  }
-
-  /* ---------- settings / toggle switch ---------- */
-  .switch-row{ display:flex; align-items:flex-start; justify-content:space-between; gap:14px; }
-  .switch-label strong{ display:block; font-size:13.5px; }
-  .switch-label small{ display:block; color:var(--text-muted); font-size:11.5px; line-height:1.6; margin-top:4px; }
-  .switch{ position:relative; width:42px; height:24px; flex-shrink:0; margin-top:2px; }
-  .switch input{ opacity:0; width:0; height:0; position:absolute; }
-  .slider-track{
-    position:absolute; inset:0; background:var(--line-strong); border-radius:999px; cursor:pointer; transition:.2s;
-  }
-  .slider-track::before{
-    content:""; position:absolute; width:18px; height:18px; left:3px; top:3px;
-    background:#fff; border-radius:50%; transition:.2s;
-  }
-  .switch input:checked + .slider-track{ background:var(--ink-teal); }
-  .switch input:checked + .slider-track::before{ transform:translateX(18px); }
-
-  .strength-block{ margin-top:14px; padding-top:14px; border-top:1px solid var(--line-subtle); }
-  .strength-block.is-hidden{ display:none; }
-  .row-labels{ display:flex; justify-content:space-between; font-size:10.5px; color:var(--text-faint); margin-top:4px; }
-  .smooth-status{
-    margin-top:14px; padding-top:12px; border-top:1px solid var(--line-subtle);
-    font-size:11.5px; color:var(--text-muted); line-height:1.6; min-height:32px;
-  }
-
-  /* ---------- icons ---------- */
-  svg.icon{ display:block; }
-
-  /* ---------- responsive fallback ---------- */
-  @media (max-width: 900px){
-    .workspace{ flex-direction:column; overflow-y:auto; }
-    .panel-left, .panel-right{
-      width:100%; border:none; border-bottom:1px solid var(--line-subtle);
-      flex-direction:row; flex-wrap:wrap; gap:16px 20px;
-    }
-    .panel-section{ min-width:220px; flex:1; }
-    .canvas-area{ padding:18px; }
-  }
-
-  @media (prefers-reduced-motion: reduce){
-    *{ transition:none !important; }
-  }
-</style>
-</head>
-<body>
-<div class="app">
-
-  <header class="app-header">
-    <div class="brand">
-      <div class="brand-mark">S</div>
-      <div class="brand-text">
-        <strong>SnapInk</strong>
-        <small>AIアシスト線画補正ツール</small>
-      </div>
-    </div>
-    <div class="maker-credit">開発元 <b>Litixy</b></div>
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>SnapInk — かんたんに描く</title><style>
+:root{
+ --bg:#17191d;--panel:#1f2228;--panel2:#262a31;--line:#353b46;--text:#eef1f5;--muted:#929baa;
+ --accent:#6f8cff;--danger:#ff7474;--paper:#f7f7f7;--checker:#e5e7eb;
+ --font-ui:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic",Meiryo,sans-serif;
+}
+*{box-sizing:border-box}html,body{height:100%;margin:0}body{font-family:var(--font-ui);background:var(--bg);color:var(--text);overflow:hidden}
+button,input{font:inherit;color:inherit}.app{height:100vh;display:flex;flex-direction:column}
+.header{height:48px;display:flex;align-items:center;gap:14px;padding:0 14px;background:var(--panel);border-bottom:1px solid var(--line);flex:none}
+.logo{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;overflow:hidden;background:linear-gradient(145deg,#8da4ff 0%,#6f8cff 45%,#5969dd 100%);box-shadow:0 5px 14px rgba(91,111,231,.28),inset 0 1px 0 rgba(255,255,255,.42);color:#fff}.logo svg{width:23px;height:23px;display:block;filter:drop-shadow(0 1px 1px rgba(31,38,92,.25))}.brand{font-weight:700;letter-spacing:.1px}.sub{color:var(--muted);font-size:11px;margin-left:2px}
+.header-spacer{flex:1}.header-btn{border:1px solid var(--line);background:var(--panel2);border-radius:8px;padding:6px 10px;cursor:pointer;font-size:12px}.header-btn:hover{background:#303641}.size-panel{position:fixed;z-index:80;top:56px;right:14px;width:370px;max-width:calc(100vw - 28px);max-height:calc(100vh - 90px);overflow:auto;padding:14px;border:1px solid var(--line);border-radius:10px;background:var(--panel);box-shadow:0 14px 36px rgba(0,0,0,.4)}.size-panel[hidden]{display:none}.size-panel h2{font-size:13px;margin:0 0 5px}.size-intro{display:block;margin-bottom:12px;color:var(--muted);font-size:10px}.size-preset-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}.size-preset{min-width:0;padding:7px 3px 6px;border:1px solid var(--line);border-radius:8px;background:var(--panel2);color:var(--muted);cursor:pointer}.size-preset:hover,.size-preset.selected{border-color:var(--accent);background:rgba(111,140,255,.15);color:var(--text)}.preset-shape{display:block;width:38px;height:26px;margin:0 auto 5px;border:1px solid currentColor;border-radius:4px;background:rgba(111,140,255,.16)}.preset-shape.circle{width:26px;border-radius:50%}.preset-shape.oval{border-radius:50%}.preset-shape.tall{width:22px;height:32px}.preset-shape.wide{width:42px;height:20px}.preset-shape.pill{height:17px;border-radius:999px}.preset-label{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:9px;text-align:center}.size-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.size-fields label{display:flex;flex-direction:column;gap:5px;font-size:11px;color:var(--muted)}.size-fields input{width:100%;padding:7px 8px;border:1px solid var(--line);border-radius:6px;background:var(--panel2)}.size-actions{display:flex;gap:8px;margin-top:12px}.size-actions button{flex:1;padding:7px;border:1px solid var(--line);border-radius:6px;background:var(--panel2);cursor:pointer;font-size:12px}.size-actions button.primary{background:var(--accent);border-color:var(--accent);color:#fff}.size-note{display:block;margin-top:9px;color:var(--muted);font-size:10px;line-height:1.4}.advanced-size{margin-top:12px;color:var(--muted);font-size:10px}.shape-panel{position:fixed;z-index:79;left:66px;top:56px;width:360px;max-width:calc(100vw - 80px);max-height:calc(100vh - 100px);overflow:auto;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--panel);box-shadow:0 14px 36px rgba(0,0,0,.4)}.shape-panel[hidden]{display:none}.shape-panel h2{font-size:13px;margin:0 0 5px}.shape-help{display:block;color:var(--muted);font-size:10px;margin-bottom:10px}.shape-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}.shape-choice{min-height:52px;padding:5px 2px;border:1px solid var(--line);border-radius:7px;background:var(--panel2);color:var(--muted);cursor:pointer}.shape-choice:hover,.shape-choice.selected{border-color:var(--accent);background:rgba(111,140,255,.15);color:var(--text)}.shape-glyph{display:block;height:27px;font-size:22px;line-height:25px;text-align:center;color:currentColor}.shape-label{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:9px;text-align:center}.shape-options{display:flex;align-items:center;gap:8px;margin-top:10px;color:var(--muted);font-size:11px}.shape-panel-close{width:100%;margin-top:10px;padding:6px;border:1px solid var(--line);border-radius:6px;background:var(--panel2);color:var(--muted);cursor:pointer;font-size:11px}.shape-panel-close:hover{color:var(--text);background:#303641}.shape-choice[data-shape="octagon"]{color:#ff78b7;border-color:rgba(255,120,183,.8)}.shape-choice[data-shape="octagon"]:hover,.shape-choice[data-shape="octagon"].selected{color:#ff9ac9;background:rgba(255,120,183,.16);border-color:#ff78b7}.shape-options input{accent-color:var(--accent)}.advanced-size summary{cursor:pointer}.advanced-size[open] .size-fields{margin-top:9px}
+.main{flex:1;min-height:0;display:flex}.tools{width:52px;background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;align-items:center;padding:8px 0;gap:5px;flex:none}
+.tool{width:36px;height:36px;border:1px solid transparent;background:transparent;border-radius:8px;color:var(--muted);cursor:pointer;display:grid;place-items:center}.tool:hover{background:#2b3038;color:#fff}.tool.active{background:rgba(111,140,255,.16);border-color:var(--accent);color:var(--accent)}
+.sep{width:24px;height:1px;background:var(--line);margin:4px 0}
+.center{min-width:0;flex:1;display:flex;flex-direction:column}.bar{height:48px;display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--panel);border-bottom:1px solid var(--line);flex:none}.bar-group{display:flex;align-items:center;gap:7px}.bar label{font-size:11px;color:var(--muted)}
+.icon{width:30px;height:30px;border:1px solid var(--line);background:var(--panel2);border-radius:7px;display:grid;place-items:center;cursor:pointer}.icon:hover{background:#303641}.icon.danger{color:var(--danger)}
+.color{width:30px;height:30px;border-radius:7px;padding:2px;border:1px solid var(--line);background:none}.range{width:100px}.val{font-size:11px;color:var(--muted);min-width:32px}.spacer{flex:1}
+.toggle{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);cursor:pointer}.toggle input{display:none}.switch{width:32px;height:18px;background:#454b56;border-radius:999px;position:relative}.switch:after{content:"";position:absolute;top:3px;left:3px;width:12px;height:12px;background:#fff;border-radius:50%;transition:.16s}.toggle input:checked+.switch{background:var(--accent)}.toggle input:checked+.switch:after{left:17px}
+.zoom{width:84px}.canvas-area{flex:1;min-height:0;overflow:auto;display:flex;align-items:center;justify-content:center;padding:20px;background:#111318;background-image:radial-gradient(#30343d 1px,transparent 1px);background-size:20px 20px}
+.stage-wrap{position:relative;flex:none}.canvas-stage{position:relative;width:1100px;height:720px;box-shadow:0 18px 50px rgba(0,0,0,.45);overflow:hidden;background-color:var(--paper);background-image:linear-gradient(45deg,var(--checker) 25%,transparent 25%),linear-gradient(-45deg,var(--checker) 25%,transparent 25%),linear-gradient(45deg,transparent 75%,var(--checker) 75%),linear-gradient(-45deg,transparent 75%,var(--checker) 75%);background-size:20px 20px;background-position:0 0,0 10px,10px -10px,-10px 0}
+.draw-layer{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}.draw-layer.hidden-layer{display:none}#interaction{pointer-events:auto;cursor:none;touch-action:none}.brush-cursor{position:absolute;z-index:20;pointer-events:none;border:1.5px solid var(--accent);border-radius:50%;transform:translate(-50%,-50%);display:none}.brush-cursor.eraser-cursor{border-color:#89919e;border-style:dashed;background:rgba(255,255,255,.2)}
+.bottom{height:38px;border-top:1px solid var(--line);background:var(--panel);display:flex;align-items:center;padding:0 10px;gap:10px;flex:none}.status{font-size:11px;color:var(--muted);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.hint{font-size:10px;color:#737b89}
+.hidden-ui{position:fixed;left:-10000px;top:-10000px;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none}
+@media(max-width:850px){.sub{display:none}.bar{overflow:auto}.tools{width:46px}.canvas-area{padding:10px}.hint{display:none}}
+</style></head><body><div class="app">
+  <header class="header">
+    <div class="logo" aria-label="SnapInk logo"><svg viewBox="0 0 32 32" role="img" aria-hidden="true"><defs><linearGradient id="inkMark" x1="7" y1="26" x2="25" y2="6" gradientUnits="userSpaceOnUse"><stop stop-color="#ffffff"/><stop offset="1" stop-color="#e8edff"/></linearGradient></defs><path d="M8.1 22.8 9.6 27l4.2-1.5L25.1 14.2l-4.9-4.9L8.1 22.8Z" fill="url(#inkMark)"/><path d="m18.8 8.2 2-2a1.8 1.8 0 0 1 2.5 0l2.5 2.5a1.8 1.8 0 0 1 0 2.5l-2 2-5-5Z" fill="#fff" opacity=".96"/><path d="m8.1 22.8 1.5 4.2 4.2-1.5" fill="#cfd8ff"/><path d="M25.7 4.1v3.1M24.1 5.7h3.2" stroke="#fff" stroke-width="1.4" stroke-linecap="round" opacity=".9"/></svg></div><div class="brand">SnapInk</div><div class="sub">かんたんに描く</div>
+    <div class="header-spacer"></div>
+    <button class="header-btn" id="refLoadBtn">画像</button>
+    <button class="header-btn" id="sizeBtn" aria-expanded="false">サイズ</button>
+    <button class="header-btn" id="saveBtn">保存</button>
   </header>
-
-  <div class="workspace">
-
-    <!-- ============ 左パネル：ツール ============ -->
-    <aside class="panel panel-left">
-
-      <div class="panel-section">
-        <h2>ツール</h2>
-        <div class="tool-row">
-          <button type="button" class="tool-btn active" data-tool="pen" title="ペン">
-            <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M14.5 3.5 L20.5 9.5 L9 21 L3 21 L3 15 Z"/>
-              <path d="M12.3 5.7 L18.3 11.7"/>
-            </svg>
-            <span>ペン</span>
-          </button>
-          <button type="button" class="tool-btn" data-tool="eraser" title="消しゴム">
-            <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M18 13 L9 22 L3 22 L3 16 L13 6 Z"/>
-              <path d="M13 6 L18 11"/>
-              <path d="M3 22 L9 22"/>
-            </svg>
-            <span>消しゴム</span>
-          </button>
-        </div>
+  <section class="size-panel" id="sizePanel" hidden aria-label="描画枠サイズ設定">
+    <h2>描画枠を図形から選ぶ</h2>
+    <small class="size-intro">形をクリックすると、その比率へ絵を合わせます。</small>
+    <div class="size-preset-grid" id="sizePresetGrid"></div>
+    <details class="advanced-size"><summary>自由なサイズ（詳細）</summary>
+      <div class="size-fields">
+        <label for="canvasWidthInput">幅（px）<input id="canvasWidthInput" type="number" min="64" max="4096" step="1" value="1100"></label>
+        <label for="canvasHeightInput">高さ（px）<input id="canvasHeightInput" type="number" min="64" max="4096" step="1" value="720"></label>
       </div>
-
-      <div class="panel-section">
-        <h2>カラーと線の太さ</h2>
-        <div class="row" style="margin-bottom:12px;">
-          <label class="field-label" for="colorInput">カラー</label>
-          <div class="color-field">
-            <input type="color" id="colorInput" value="#1a1a1a">
-            <span class="hex-label" id="colorHexLabel">#1a1a1a</span>
-          </div>
-        </div>
-        <div class="row">
-          <label class="field-label" for="widthInput">線の太さ</label>
-          <span class="value-label" id="widthValueLabel">4px</span>
-        </div>
-        <div class="width-row">
-          <input type="range" id="widthInput" min="1" max="60" value="4" step="1">
-          <div class="width-preview-wrap"><div class="width-preview" id="widthPreview"></div></div>
-        </div>
-      </div>
-
-      <div class="panel-section">
-        <h2>レイヤー</h2>
-        <div class="layer-list">
-          <div class="layer-item active" data-layer="line">
-            <div class="layer-name">線画
-              <span class="layer-hint">アウトラインを描くレイヤー</span>
-            </div>
-            <button type="button" class="layer-vis-btn" data-layer="line" aria-label="線画レイヤーの表示切り替え" title="表示 / 非表示">
-              <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M2 12 C4.5 6.5 9 4 12 4 C15 4 19.5 6.5 22 12 C19.5 17.5 15 20 12 20 C9 20 4.5 17.5 2 12 Z"/>
-                <circle cx="12" cy="12" r="3"/>
-              </svg>
-            </button>
-          </div>
-          <div class="layer-item" data-layer="base">
-            <div class="layer-name">下塗り
-              <span class="layer-hint">色を置くレイヤー</span>
-            </div>
-            <button type="button" class="layer-vis-btn" data-layer="base" aria-label="下塗りレイヤーの表示切り替え" title="表示 / 非表示">
-              <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M2 12 C4.5 6.5 9 4 12 4 C15 4 19.5 6.5 22 12 C19.5 17.5 15 20 12 20 C9 20 4.5 17.5 2 12 Z"/>
-                <circle cx="12" cy="12" r="3"/>
-              </svg>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div class="panel-section">
-        <h2>操作</h2>
-        <div class="btn-row">
-          <button type="button" class="btn" id="undoBtn" disabled>
-            <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M7 7 L3 11 L7 15"/>
-              <path d="M3 11 H14 C18 11 21 14 21 18"/>
-            </svg>
-            元に戻す
-          </button>
-          <button type="button" class="btn ghost-danger" id="clearBtn">
-            <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M4 7 H20"/>
-              <path d="M9 7 V4 H15 V7"/>
-              <path d="M6 7 L7 21 H17 L18 7"/>
-            </svg>
-            レイヤーを消去
-          </button>
-        </div>
-      </div>
-
-      <div class="panel-section" style="margin-top:auto;">
-        <h2>書き出し</h2>
-        <button type="button" class="btn primary" id="saveBtn">
-          <svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 3 V15"/>
-            <path d="M7 10 L12 15 L17 10"/>
-            <path d="M4 19 H20"/>
-          </svg>
-          PNGを書き出す
-        </button>
-      </div>
-
+      <div class="size-actions"><button id="sizeCancelBtn" type="button">キャンセル</button><button id="sizeApplyBtn" class="primary" type="button">適用</button></div>
+    </details>
+    <small class="size-note">リサイズ前の状態はUndoで戻せます。部分的な引っ張り・曲げは次の変形ツールで追加できます。</small>
+  </section>
+  <section class="shape-panel" id="shapePanel" hidden aria-label="図形を追加">
+    <h2>図形を追加</h2>
+    <small class="shape-help">図形を選び、キャンバス上で始点から終点へドラッグして配置します。</small>
+    <div class="shape-grid" id="shapeGrid"></div>
+    <label class="shape-options"><input id="shapeFillToggle" type="checkbox"> 内側を塗りつぶす</label>
+    <label class="shape-options"><input id="shapeOutlineToggle" type="checkbox" checked> 枠線を表示</label>
+    <button type="button" class="shape-panel-close" id="shapePanelClose">閉じる</button>
+  </section>
+  <div class="main">
+    <aside class="tools" id="toolDock">
+      <button type="button" class="tool tool-icon-btn active" data-tool="pen" title="ペン"><span>✎</span></button>
+      <button type="button" class="tool tool-icon-btn" data-tool="eraser" title="消しゴム"><span>⌫</span></button>
+      <button type="button" class="tool tool-icon-btn" data-tool="eyedropper" title="スポイト"><span>⌕</span></button>
+      <button type="button" class="tool tool-icon-btn" data-tool="fill" title="塗りつぶし"><span>◒</span></button>
+      <button type="button" class="tool tool-icon-btn" data-tool="shape" title="図形を追加"><span>◇</span></button>
+      <div class="sep"></div>
+      <button type="button" class="tool tool-icon-btn" data-tool="select" title="ポインターで選択"><span>➤</span></button>
+      <button type="button" class="tool tool-icon-btn" data-tool="text" title="文字"><span>T</span></button>
     </aside>
-
-    <!-- ============ 中央：メインキャンバス ============ -->
-    <main class="canvas-area">
-      <div class="canvas-stage" id="canvasStage">
-        <canvas id="layer-base" class="draw-layer"></canvas>
-        <canvas id="layer-line" class="draw-layer"></canvas>
-        <canvas id="interaction" class="draw-layer"></canvas>
-        <div class="brush-cursor" id="brushCursor"></div>
+    <section class="center">
+      <div class="bar">
+        <div class="bar-group"><input class="color" type="color" id="colorInput" value="#1a1a1a" title="色"><span class="val" id="colorHexLabel">#1a1a1a</span></div>
+        <div class="bar-group"><label for="widthInput">太さ</label><input class="range" id="widthInput" type="range" min="1" max="60" value="4"><span class="val" id="widthValueLabel">4px</span></div>
+        <div class="bar-group"><label class="toggle"><input type="checkbox" id="smoothToggleQuick" checked><span class="switch"></span>なめらか</label></div>
+        <button class="icon" id="undoBtn" disabled title="元に戻す">↶</button><button class="icon" id="redoBtn" disabled title="やり直す">↷</button>
+        <button class="icon" id="flipBtn" title="左右反転">↔</button><button class="icon danger" id="clearBtn" title="全部消す">×</button>
+        <div class="spacer"></div><label for="zoomInput">ズーム</label><input class="zoom" id="zoomInput" type="range" min="50" max="200" value="100"><span class="val" id="zoomValue">100%</span>
       </div>
-    </main>
+      <main class="canvas-area" id="canvasArea"><div class="stage-wrap" id="stageWrap"><div class="canvas-stage" id="canvasStage">
+        <canvas id="layer-base" class="draw-layer"></canvas><canvas id="layer-line" class="draw-layer"></canvas><canvas id="interaction" class="draw-layer"></canvas><div class="brush-cursor" id="brushCursor"></div>
+      </div></div></main>
+    </section>
+  </div>
+  <footer class="bottom"><div class="status" id="statusBar">ペン ・ 1100×720px</div><div class="hint">P ペン　E 消しゴム　Ctrl+Z 元に戻す　Delete 選択範囲を消去</div></footer>
 
-    <!-- ============ 右パネル：参照画像 & 設定 ============ -->
-    <aside class="panel panel-right">
-
-      <div class="panel-section">
-        <h2>参照画像</h2>
-        <div class="reference-frame" id="referenceFrame">
-          <img id="refImage" alt="読み込んだ参照画像">
-          <div class="ref-placeholder" id="refPlaceholder">参照用の画像はまだありません。<br>読み込むとここに表示されます。</div>
-        </div>
-        <span class="ref-filename" id="refFileName"></span>
-        <div class="btn-row">
-          <button type="button" class="btn" id="refLoadBtn">
-            <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 16 V4"/>
-              <path d="M7 9 L12 4 L17 9"/>
-              <path d="M4 16 V19 H20 V16"/>
-            </svg>
-            画像を読み込む
-          </button>
-          <button type="button" class="btn ghost-danger" id="refClearBtn" disabled>参照を削除</button>
-        </div>
-        <input type="file" id="refInput" accept="image/*" style="display:none;">
-      </div>
-
-      <div class="panel-section">
-        <h2>AI補正設定</h2>
-        <div class="switch-row">
-          <div class="switch-label">
-            <strong>AIで線画を補正</strong>
-            <small>描画を終えると、手描きのストロークを自動でなめらかな線に整えます。</small>
-          </div>
-          <label class="switch">
-            <input type="checkbox" id="smoothToggle" checked>
-            <span class="slider-track"></span>
-          </label>
-        </div>
-
-        <div class="strength-block" id="strengthBlock">
-          <div class="row">
-            <label class="field-label" for="strengthInput">補正の強さ</label>
-            <span class="value-label" id="strengthValueLabel">40</span>
-          </div>
-          <input type="range" id="strengthInput" min="0" max="100" step="5" value="40" style="width:100%; margin-top:8px;">
-          <div class="row-labels"><span>弱め（形を保つ）</span><span>強め（なめらか）</span></div>
-        </div>
-
-        <div class="smooth-status" id="smoothStatus">まだ描画されていません。</div>
-      </div>
-
-    </aside>
-
+  <div class="hidden-ui">
+    <input type="file" id="refInput" accept="image/*"><img id="refImage"><div id="refPlaceholder"></div><span id="refFileName"></span><button id="refClearBtn"></button>
+    <label class="switch"><input type="checkbox" id="smoothToggle" checked></label><div id="strengthBlock"><input type="range" id="strengthInput" min="0" max="100" value="40"><span id="strengthValueLabel">40</span></div><div id="smoothStatus"></div>
+    <div class="panel-section"><button id="clearSelectionBtn"></button></div>
+    <label for="dummyWidth">dummy</label><input id="dummyWidth" type="range">
   </div>
 </div>
-
 <script>
 (function(){
   "use strict";
@@ -462,12 +92,18 @@
   /* =========================================================
      初期設定
   ========================================================= */
-  const CANVAS_W = 1100;
-  const CANVAS_H = 720;
+  let CANVAS_W = 1100;
+  let CANVAS_H = 720;
   const UNDO_LIMIT = 20;
+
+  const TOOL_NAMES = { pen:"ペン", eraser:"消しゴム", eyedropper:"スポイト", fill:"塗りつぶし", shape:"図形", select:"範囲選択", text:"テキスト" };
+  const LAYER_NAMES = { line:"線画", base:"下塗り" };
 
   const state = {
     tool: "pen",
+    shapeType: "rectangle",
+    shapeFill: false,
+    shapeOutline: true,
     color: "#1a1a1a",
     lineWidth: 4,
     activeLayer: "line",
@@ -480,7 +116,15 @@
       strength:40
     },
     drawing:false,
-    currentStroke:[]
+    currentStroke:[],
+    selecting:false,
+    selectionMoved:false,
+    selectionStart:null,
+    selectionRect:null,
+    shaping:false,
+    shapeStart:null,
+    shapeObjects:[],
+    selectedShape:null
   };
 
   /* =========================================================
@@ -503,10 +147,31 @@
   const widthInput = document.getElementById("widthInput");
   const widthValueLabel = document.getElementById("widthValueLabel");
   const widthPreview = document.getElementById("widthPreview");
+  const widthLabelEl = document.querySelector('label[for="widthInput"]');
+  const sizeBtn = document.getElementById("sizeBtn");
+  const sizePanel = document.getElementById("sizePanel");
+  const canvasWidthInput = document.getElementById("canvasWidthInput");
+  const canvasHeightInput = document.getElementById("canvasHeightInput");
+  const sizeCancelBtn = document.getElementById("sizeCancelBtn");
+  const sizeApplyBtn = document.getElementById("sizeApplyBtn");
+  const sizePresetGrid = document.getElementById("sizePresetGrid");
+  const shapePanel = document.getElementById("shapePanel");
+  const shapeGrid = document.getElementById("shapeGrid");
+  const shapeFillToggle = document.getElementById("shapeFillToggle");
+  const shapeOutlineToggle = document.getElementById("shapeOutlineToggle");
+  const shapePanelClose = document.getElementById("shapePanelClose");
+
+  const colorOptGroup = document.getElementById("colorOptGroup");
+  const widthOptGroup = document.getElementById("widthOptGroup");
+  const aiOptGroup = document.getElementById("aiOptGroup");
 
   const undoBtn = document.getElementById("undoBtn");
+  const redoBtn = document.getElementById("redoBtn");
+  const flipBtn = document.getElementById("flipBtn");
   const clearBtn = document.getElementById("clearBtn");
+  const clearSelectionBtn = document.getElementById("clearSelectionBtn");
   const saveBtn = document.getElementById("saveBtn");
+  const statusBarEl = document.getElementById("statusBar");
 
   const refInput = document.getElementById("refInput");
   const refLoadBtn = document.getElementById("refLoadBtn");
@@ -516,12 +181,15 @@
   const refClearBtn = document.getElementById("refClearBtn");
 
   const smoothToggle = document.getElementById("smoothToggle");
+  const smoothToggleQuick = document.getElementById("smoothToggleQuick");
   const strengthBlock = document.getElementById("strengthBlock");
   const strengthInput = document.getElementById("strengthInput");
   const strengthValueLabel = document.getElementById("strengthValueLabel");
   const smoothStatus = document.getElementById("smoothStatus");
 
-  const undoStacks = { base:[], line:[] };
+  /* 統合Undo/Redo履歴（複数レイヤーにまたがる操作にも対応） */
+  let undoStack = [];
+  let redoStack = [];
 
   /* =========================================================
      初期化
@@ -531,8 +199,10 @@
       c.width = CANVAS_W;
       c.height = CANVAS_H;
     });
-    updateUndoButton();
-    updateWidthPreview();
+    selectTool("pen");
+    highlightActiveSwatch();
+    updateUndoRedoButtons();
+    updateSelectionButtons();
   }
 
   /* =========================================================
@@ -546,6 +216,22 @@
       x:(evt.clientX - rect.left) * scaleX,
       y:(evt.clientY - rect.top) * scaleY
     };
+  }
+
+  function clamp(v, min, max){ return Math.min(max, Math.max(min, v)); }
+
+  /* =========================================================
+     ステータスバー
+  ========================================================= */
+  function updateStatusBar(){
+    const parts = [];
+    parts.push("ツール: " + (TOOL_NAMES[state.tool] || state.tool));
+    parts.push("レイヤー: " + (LAYER_NAMES[state.activeLayer] || state.activeLayer));
+    if (state.selectionRect && state.selectionRect.w > 0 && state.selectionRect.h > 0){
+      parts.push("選択範囲: " + Math.round(state.selectionRect.w) + "×" + Math.round(state.selectionRect.h) + "px");
+    }
+    parts.push(CANVAS_W + "×" + CANVAS_H + "px");
+    statusBarEl.textContent = parts.join("  ・  ");
   }
 
   /* =========================================================
@@ -575,33 +261,51 @@
   }
 
   /* =========================================================
-     Undo管理
+     Undo / Redo（統合履歴）
   ========================================================= */
-  function activeCtx(){
-    return state.activeLayer === "base" ? ctxBase : ctxLine;
+  function snapshotLayers(layerKeys){
+    const snap = {};
+    layerKeys.forEach(function(key){
+      const ctx = key === "base" ? ctxBase : ctxLine;
+      snap[key] = ctx.getImageData(0, 0, CANVAS_W, CANVAS_H);
+    });
+    return snap;
   }
 
-  function pushUndo(layer){
-    const ctx = layer === "base" ? ctxBase : ctxLine;
-    const data = ctx.getImageData(0, 0, CANVAS_W, CANVAS_H);
-    const stack = undoStacks[layer];
-    stack.push(data);
-    if (stack.length > UNDO_LIMIT) stack.shift();
-    updateUndoButton();
+  function pushUndo(layerKeys){
+    undoStack.push(snapshotLayers(layerKeys));
+    if (undoStack.length > UNDO_LIMIT) undoStack.shift();
+    redoStack = [];
+    updateUndoRedoButtons();
   }
 
   function undo(){
-    const layer = state.activeLayer;
-    const stack = undoStacks[layer];
-    if (!stack.length) return;
-    const data = stack.pop();
-    const ctx = layer === "base" ? ctxBase : ctxLine;
-    ctx.putImageData(data, 0, 0);
-    updateUndoButton();
+    if (!undoStack.length) return;
+    const snap = undoStack.pop();
+    const keys = Object.keys(snap);
+    redoStack.push(snapshotLayers(keys));
+    keys.forEach(function(key){
+      const ctx = key === "base" ? ctxBase : ctxLine;
+      ctx.putImageData(snap[key], 0, 0);
+    });
+    updateUndoRedoButtons();
   }
 
-  function updateUndoButton(){
-    undoBtn.disabled = undoStacks[state.activeLayer].length === 0;
+  function redo(){
+    if (!redoStack.length) return;
+    const snap = redoStack.pop();
+    const keys = Object.keys(snap);
+    undoStack.push(snapshotLayers(keys));
+    keys.forEach(function(key){
+      const ctx = key === "base" ? ctxBase : ctxLine;
+      ctx.putImageData(snap[key], 0, 0);
+    });
+    updateUndoRedoButtons();
+  }
+
+  function updateUndoRedoButtons(){
+    undoBtn.disabled = undoStack.length === 0;
+    redoBtn.disabled = redoStack.length === 0;
   }
 
   /* =========================================================
@@ -695,8 +399,12 @@
   }
 
   /* =========================================================
-     ストローク確定処理
+     ストローク確定処理（ペン／消しゴム）
   ========================================================= */
+  function activeCtx(){
+    return state.activeLayer === "base" ? ctxBase : ctxLine;
+  }
+
   function commitDot(p){
     const ctx = activeCtx();
     applyStrokeStyle(ctx);
@@ -742,19 +450,341 @@
   }
 
   /* =========================================================
+     スポイトツール
+  ========================================================= */
+  function rgbToHex(r, g, b){
+    return "#" + [r, g, b].map(function(v){
+      return v.toString(16).padStart(2, "0");
+    }).join("");
+  }
+
+  function pickColorAt(x, y){
+    const merge = document.createElement("canvas");
+    merge.width = CANVAS_W; merge.height = CANVAS_H;
+    const mctx = merge.getContext("2d");
+    mctx.fillStyle = "#e7e9ee";
+    mctx.fillRect(0, 0, CANVAS_W, CANVAS_H);
+    if (state.layers.base.visible) mctx.drawImage(canvasBase, 0, 0);
+    if (state.layers.line.visible) mctx.drawImage(canvasLine, 0, 0);
+    const px = clamp(Math.round(x), 0, CANVAS_W - 1);
+    const py = clamp(Math.round(y), 0, CANVAS_H - 1);
+    const data = mctx.getImageData(px, py, 1, 1).data;
+    setColor(rgbToHex(data[0], data[1], data[2]));
+  }
+
+  /* =========================================================
+     塗りつぶしツール（バケツ）
+  ========================================================= */
+  function hexToRgb(hex){
+    const v = hex.replace("#", "");
+    return {
+      r:parseInt(v.substring(0, 2), 16),
+      g:parseInt(v.substring(2, 4), 16),
+      b:parseInt(v.substring(4, 6), 16)
+    };
+  }
+
+  function colorsMatch(r1,g1,b1,a1, r2,g2,b2,a2, tol){
+    return Math.abs(r1 - r2) <= tol && Math.abs(g1 - g2) <= tol &&
+           Math.abs(b1 - b2) <= tol && Math.abs(a1 - a2) <= tol;
+  }
+
+  function floodFill(ctx, startX, startY, fillColorHex){
+    if (startX < 0 || startX >= CANVAS_W || startY < 0 || startY >= CANVAS_H) return;
+    const imgData = ctx.getImageData(0, 0, CANVAS_W, CANVAS_H);
+    const data = imgData.data;
+    const w = CANVAS_W, h = CANVAS_H;
+    const startIdx = (startY * w + startX) * 4;
+    const startR = data[startIdx], startG = data[startIdx + 1], startB = data[startIdx + 2], startA = data[startIdx + 3];
+
+    const fill = hexToRgb(fillColorHex);
+    const tolerance = 48;
+
+    if (colorsMatch(startR, startG, startB, startA, fill.r, fill.g, fill.b, 255, 4)) return;
+
+    const stack = [[startX, startY]];
+    const visited = new Uint8Array(w * h);
+
+    while (stack.length){
+      const p = stack.pop();
+      const x = p[0], y = p[1];
+      if (x < 0 || x >= w || y < 0 || y >= h) continue;
+      const vIdx = y * w + x;
+      if (visited[vIdx]) continue;
+      const idx = vIdx * 4;
+      if (!colorsMatch(data[idx], data[idx+1], data[idx+2], data[idx+3], startR, startG, startB, startA, tolerance)) continue;
+      visited[vIdx] = 1;
+      data[idx] = fill.r; data[idx+1] = fill.g; data[idx+2] = fill.b; data[idx+3] = 255;
+      stack.push([x+1,y],[x-1,y],[x,y+1],[x,y-1]);
+    }
+    ctx.putImageData(imgData, 0, 0);
+  }
+
+  /* =========================================================
+     テキストツール
+  ========================================================= */
+  function getTextFontSize(){
+    return Math.max(Math.round(state.lineWidth * 4), 12);
+  }
+
+  function placeTextAt(p){
+    const old = document.getElementById('inlineTextEditor');
+    if(old) old.remove();
+    const wrap = document.createElement('div');
+    wrap.id = 'inlineTextEditor';
+    wrap.style.cssText = 'position:absolute;z-index:60;left:'+(p.x/CANVAS_W*100)+'%;top:'+(p.y/CANVAS_H*100)+'%;transform:translate(-2px,-2px);';
+    const input=document.createElement('input');
+    input.type='text'; input.placeholder='文字を入力…'; input.autocomplete='off';
+    input.style.cssText='width:220px;padding:8px 10px;border:1px solid var(--ink-teal);border-radius:8px;background:white;color:#111;box-shadow:0 6px 18px rgba(0,0,0,.18);font:16px var(--font-ui);';
+    wrap.appendChild(input); stageEl.appendChild(wrap); input.focus();
+    const commit=()=>{ const text=input.value.trim(); wrap.remove(); if(!text) return; const layer=state.activeLayer; pushUndo([layer]); const ctx=layer==='base'?ctxBase:ctxLine; ctx.save(); ctx.globalCompositeOperation='source-over'; ctx.fillStyle=state.color; ctx.font=getTextFontSize()+'px "Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif'; ctx.textBaseline='top'; ctx.fillText(text,p.x,p.y); ctx.restore(); };
+    input.addEventListener('keydown',e=>{ if(e.key==='Enter'){e.preventDefault();commit();} else if(e.key==='Escape'){wrap.remove();} });
+    input.addEventListener('blur',commit);
+  }
+
+  /* =========================================================
+     範囲選択
+  ========================================================= */
+  function normalizeRect(a, b){
+    const x1 = clamp(Math.min(a.x, b.x), 0, CANVAS_W);
+    const y1 = clamp(Math.min(a.y, b.y), 0, CANVAS_H);
+    const x2 = clamp(Math.max(a.x, b.x), 0, CANVAS_W);
+    const y2 = clamp(Math.max(a.y, b.y), 0, CANVAS_H);
+    return { x:x1, y:y1, w:x2 - x1, h:y2 - y1 };
+  }
+
+  const SHAPES = [
+    ["rectangle","長方形","▭"],["rounded","角丸","▢"],["ellipse","楕円","⬭"],["circle","円","○"],["triangle","三角形","△"],
+    ["rightTriangle","直角三角","◢"],["diamond","ひし形","◇"],["parallelogram","平行四辺形","▱"],["trapezoid","台形","⏢"],["pentagon","五角形","⬠"],
+    ["hexagon","六角形","⬡"],["octagon","八角形","🛑"],["star5","五芒星","☆"],["star6","六芒星","✶"],["burst","爆発","☀"],
+    ["heart","ハート","♡"],["cloud","雲","☁"],["speech","吹き出し","▱"],["arrowRight","右矢印","➜"],["arrowLeft","左矢印","←"],
+    ["arrowUp","上矢印","↑"],["arrowDown","下矢印","↓"],["chevron","シェブロン","⌄"],["cross","十字","✚"],["plus","プラス","＋"],
+    ["ring","リング","◎"],["cylinder","円柱","▤"],["cone","円すい","◢"],["lightning","稲妻","ϟ"],["gear","歯車","⚙"]
+  ];
+
+  function renderShapePalette(){
+    shapeGrid.innerHTML = SHAPES.map(function(shape){
+      return '<button type="button" class="shape-choice" data-shape="'+shape[0]+'" title="'+shape[1]+'"><span class="shape-glyph">'+shape[2]+'</span><span class="shape-label">'+shape[1]+'</span></button>';
+    }).join('');
+    shapeGrid.querySelectorAll('.shape-choice').forEach(function(button){
+      button.addEventListener('click', function(){
+        state.shapeType = button.dataset.shape;
+        shapeGrid.querySelectorAll('.shape-choice').forEach(function(item){ item.classList.toggle('selected', item === button); });
+      });
+    });
+    const first = shapeGrid.querySelector('.shape-choice');
+    if (first) first.classList.add('selected');
+  }
+
+  function roundedPath(ctx, x, y, w, h, radius){
+    const r = Math.min(radius, Math.abs(w) / 2, Math.abs(h) / 2);
+    ctx.beginPath(); ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y); ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+    ctx.lineTo(x+w,y+h-r); ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h); ctx.lineTo(x+r,y+h);
+    ctx.quadraticCurveTo(x,y+h,x,y+h-r); ctx.lineTo(x,y+r); ctx.quadraticCurveTo(x,y,x+r,y); ctx.closePath();
+  }
+
+  function polygonPath(ctx, cx, cy, rx, ry, sides, rotation){
+    ctx.beginPath();
+    for (let i=0; i<sides; i++){
+      const a = rotation + i * Math.PI * 2 / sides;
+      const x = cx + Math.cos(a) * rx, y = cy + Math.sin(a) * ry;
+      if (i === 0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    }
+    ctx.closePath();
+  }
+
+  function starPath(ctx, cx, cy, rx, ry, points){
+    ctx.beginPath();
+    for (let i=0; i<points*2; i++){
+      const a = -Math.PI/2 + i * Math.PI / points;
+      const scale = i % 2 === 0 ? 1 : .42;
+      const x = cx + Math.cos(a) * rx * scale, y = cy + Math.sin(a) * ry * scale;
+      if (!i) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    }
+    ctx.closePath();
+  }
+
+  function drawShapePath(ctx, type, rect){
+    const x=rect.x, y=rect.y, w=rect.w, h=rect.h, cx=x+w/2, cy=y+h/2;
+    if (type === 'rectangle'){ ctx.beginPath(); ctx.rect(x,y,w,h); }
+    else if (type === 'rounded'){ roundedPath(ctx,x,y,w,h,Math.min(w,h)*.16); }
+    else if (type === 'ellipse'){ ctx.beginPath(); ctx.ellipse(cx,cy,Math.abs(w/2),Math.abs(h/2),0,0,Math.PI*2); }
+    else if (type === 'circle'){ const r=Math.min(Math.abs(w),Math.abs(h))/2; ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); }
+    else if (type === 'triangle'){ ctx.beginPath(); ctx.moveTo(cx,y); ctx.lineTo(x+w,y+h); ctx.lineTo(x,y+h); ctx.closePath(); }
+    else if (type === 'rightTriangle'){ ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(x+w,y+h); ctx.lineTo(x,y+h); ctx.closePath(); }
+    else if (type === 'diamond'){ polygonPath(ctx,cx,cy,w/2,h/2,4,Math.PI/4); }
+    else if (type === 'parallelogram'){ ctx.beginPath(); const s=w*.2; ctx.moveTo(x+s,y);ctx.lineTo(x+w,y);ctx.lineTo(x+w-s,y+h);ctx.lineTo(x,y+h);ctx.closePath(); }
+    else if (type === 'trapezoid'){ ctx.beginPath();ctx.moveTo(x+w*.2,y);ctx.lineTo(x+w*.8,y);ctx.lineTo(x+w,y+h);ctx.lineTo(x,y+h);ctx.closePath(); }
+    else if (type === 'pentagon'){ polygonPath(ctx,cx,cy,w/2,h/2,5,-Math.PI/2); }
+    else if (type === 'hexagon'){ polygonPath(ctx,cx,cy,w/2,h/2,6,Math.PI/6); }
+    else if (type === 'octagon'){ polygonPath(ctx,cx,cy,w/2,h/2,8,Math.PI/8); }
+    else if (type === 'star5'){ starPath(ctx,cx,cy,w/2,h/2,5); }
+    else if (type === 'star6'){ starPath(ctx,cx,cy,w/2,h/2,6); }
+    else if (type === 'burst'){ starPath(ctx,cx,cy,w/2,h/2,12); }
+    else if (type === 'heart'){ ctx.beginPath();ctx.moveTo(cx,y+h*.9);ctx.bezierCurveTo(x-w*.05,y+h*.55,x+w*.12,y+h*.08,cx,y+h*.3);ctx.bezierCurveTo(x+w*.88,y+h*.08,x+w*1.05,y+h*.55,cx,y+h*.9);ctx.closePath(); }
+    else if (type === 'cloud'){ ctx.beginPath();ctx.arc(x+w*.32,y+h*.57,h*.25,Math.PI,Math.PI*2);ctx.arc(x+w*.55,y+h*.4,h*.32,Math.PI,Math.PI*2);ctx.arc(x+w*.76,y+h*.58,h*.23,Math.PI,Math.PI*2);ctx.lineTo(x+w*.94,y+h*.85);ctx.lineTo(x+w*.1,y+h*.85);ctx.closePath(); }
+    else if (type === 'speech'){ roundedPath(ctx,x,y,w,h*.78,Math.min(w,h)*.12);ctx.moveTo(x+w*.28,y+h*.78);ctx.lineTo(x+w*.22,y+h);ctx.lineTo(x+w*.46,y+h*.78); }
+    else if (type.indexOf('arrow') === 0){ ctx.beginPath(); const vertical=type==='arrowUp'||type==='arrowDown'; const head=vertical?h*.3:w*.3; if(type==='arrowRight'){ctx.moveTo(x,y+h*.35);ctx.lineTo(x+w-head,y+h*.35);ctx.lineTo(x+w-head,y);ctx.lineTo(x+w,y+h/2);ctx.lineTo(x+w-head,y+h);ctx.lineTo(x+w-head,y+h*.65);ctx.lineTo(x,y+h*.65);} else if(type==='arrowLeft'){ctx.moveTo(x+head,y);ctx.lineTo(x,y+h/2);ctx.lineTo(x+head,y+h);ctx.lineTo(x+head,y+h*.65);ctx.lineTo(x+w,y+h*.65);ctx.lineTo(x+w,y+h*.35);ctx.lineTo(x+head,y+h*.35);} else if(type==='arrowUp'){ctx.moveTo(x+w*.35,y+head);ctx.lineTo(x+w/2,y);ctx.lineTo(x+w*.65,y+head);ctx.lineTo(x+w*.65,y+h);ctx.lineTo(x+w*.35,y+h);} else {ctx.moveTo(x+w*.35,y);ctx.lineTo(x+w*.65,y);ctx.lineTo(x+w*.65,y+h-head);ctx.lineTo(x+w,y+h-head);ctx.lineTo(x+w/2,y+h);ctx.lineTo(x,y+h-head);ctx.lineTo(x+w*.35,y+h-head);} ctx.closePath(); }
+    else if (type === 'chevron'){ ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(cx,y+h/2);ctx.lineTo(x+w,y);ctx.lineTo(x+w,y+h*.25);ctx.lineTo(cx,y+h);ctx.lineTo(x,y+h*.25);ctx.closePath(); }
+    else if (type === 'cross' || type === 'plus'){ const t=Math.min(w,h)*.32; ctx.beginPath();ctx.moveTo(cx-t,y);ctx.lineTo(cx+t,y);ctx.lineTo(cx+t,cy-t);ctx.lineTo(x+w,cy-t);ctx.lineTo(x+w,cy+t);ctx.lineTo(cx+t,cy+t);ctx.lineTo(cx+t,y+h);ctx.lineTo(cx-t,y+h);ctx.lineTo(cx-t,cy+t);ctx.lineTo(x,cy+t);ctx.lineTo(x,cy-t);ctx.lineTo(cx-t,cy-t);ctx.closePath(); }
+    else if (type === 'ring'){ctx.beginPath();ctx.arc(cx,cy,Math.min(w,h)/2,0,Math.PI*2);}
+    else if (type === 'cylinder'){ctx.beginPath();ctx.ellipse(cx,y+h*.18,w/2,h*.18,0,0,Math.PI*2);ctx.moveTo(x,y+h*.18);ctx.lineTo(x,y+h*.8);ctx.ellipse(cx,y+h*.8,w/2,h*.18,0,0,Math.PI);ctx.lineTo(x,y+h*.18);}
+    else if (type === 'cone'){ctx.beginPath();ctx.moveTo(cx,y);ctx.lineTo(x+w,y+h*.8);ctx.ellipse(cx,y+h*.8,w/2,h*.18,0,0,Math.PI);ctx.closePath();}
+    else if (type === 'lightning'){ctx.beginPath();ctx.moveTo(x+w*.58,y);ctx.lineTo(x+w*.18,y+h*.56);ctx.lineTo(x+w*.46,y+h*.56);ctx.lineTo(x+w*.34,y+h);ctx.lineTo(x+w*.84,y+h*.35);ctx.lineTo(x+w*.56,y+h*.35);ctx.closePath();}
+    else if (type === 'gear'){ starPath(ctx,cx,cy,w/2,h/2,8); }
+  }
+
+  function drawShape(ctx, type, rect, fill, outline){
+    ctx.save(); drawShapePath(ctx,type,rect); ctx.globalCompositeOperation='source-over';
+    ctx.strokeStyle=state.color; ctx.fillStyle=state.color; ctx.lineWidth=state.lineWidth; ctx.lineJoin='round'; ctx.lineCap='round';
+    if (fill) ctx.fill();
+    if (outline !== false) ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawShapePreview(rect){
+    ctxInteraction.clearRect(0,0,CANVAS_W,CANVAS_H); ctxInteraction.save(); ctxInteraction.globalAlpha=.75;
+    drawShape(ctxInteraction,state.shapeType,rect,state.shapeFill,state.shapeOutline); ctxInteraction.restore();
+  }
+
+  function drawSelectionOverlay(rect){
+    ctxInteraction.clearRect(0, 0, CANVAS_W, CANVAS_H);
+    if (!rect) return;
+    ctxInteraction.save();
+    ctxInteraction.setLineDash([6, 4]);
+    ctxInteraction.lineWidth = 1.5;
+    ctxInteraction.strokeStyle = "rgba(47,158,143,0.9)";
+    ctxInteraction.strokeRect(rect.x + 0.5, rect.y + 0.5, rect.w, rect.h);
+    ctxInteraction.restore();
+  }
+
+  function findShapeAt(point){
+    for (let i = state.shapeObjects.length - 1; i >= 0; i--){
+      const item = state.shapeObjects[i];
+      const r = item.rect;
+      if (point.x >= r.x && point.x <= r.x + r.w && point.y >= r.y && point.y <= r.y + r.h) return item;
+    }
+    return null;
+  }
+
+  function drawSelectionPreview(start, current){
+    const rect = normalizeRect(start, current);
+    state.selectionRect = rect;
+    drawSelectionOverlay(rect);
+    updateSelectionButtons();
+  }
+
+  function updateSelectionButtons(){
+    const has = !!(state.selectionRect && state.selectionRect.w > 0 && state.selectionRect.h > 0);
+    clearSelectionBtn.disabled = !has;
+    updateStatusBar();
+  }
+
+  function deselect(){
+    state.selectionRect = null;
+    ctxInteraction.clearRect(0, 0, CANVAS_W, CANVAS_H);
+    updateSelectionButtons();
+  }
+
+  function deleteSelectedShape(){
+    const shape = state.selectedShape;
+    if (!shape) return false;
+    const layer = shape.layer || state.activeLayer;
+    const ctx = layer === "base" ? ctxBase : ctxLine;
+    pushUndo([layer]);
+    ctx.clearRect(shape.rect.x - state.lineWidth - 2, shape.rect.y - state.lineWidth - 2, shape.rect.w + state.lineWidth * 2 + 4, shape.rect.h + state.lineWidth * 2 + 4);
+    state.shapeObjects = state.shapeObjects.filter(function(item){ return item !== shape; });
+    state.selectedShape = null;
+    deselect();
+    state.shapeObjects.filter(function(item){ return item.layer === layer; }).forEach(function(item){
+      drawShape(ctx, item.type, item.rect, item.fill, item.outline);
+    });
+    return true;
+  }
+
+  function eraseSelectionArea(){
+    if (state.selectedShape && deleteSelectedShape()) return;
+    if (!state.selectionRect || state.selectionRect.w <= 0 || state.selectionRect.h <= 0) return;
+    const layer = state.activeLayer;
+    pushUndo([layer]);
+    const ctx = layer === "base" ? ctxBase : ctxLine;
+    const r = state.selectionRect;
+    ctx.clearRect(r.x, r.y, r.w, r.h);
+    deselect();
+  }
+
+  /* =========================================================
+     左右反転
+  ========================================================= */
+  function flipCanvasHorizontal(ctx){
+    const temp = document.createElement("canvas");
+    temp.width = CANVAS_W; temp.height = CANVAS_H;
+    temp.getContext("2d").drawImage(ctx.canvas, 0, 0);
+    ctx.save();
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.clearRect(0, 0, CANVAS_W, CANVAS_H);
+    ctx.translate(CANVAS_W, 0);
+    ctx.scale(-1, 1);
+    ctx.drawImage(temp, 0, 0);
+    ctx.restore();
+  }
+
+  /* =========================================================
      ポインター入力（マウス／タッチ／ペン対応）
   ========================================================= */
   function onPointerDown(e){
     if (e.pointerType === "mouse" && e.button !== 0) return;
-    interaction.setPointerCapture(e.pointerId);
-    pushUndo(state.activeLayer);
-    state.drawing = true;
     const p = getPos(e);
+
+    if (state.tool === "eyedropper"){
+      pickColorAt(p.x, p.y);
+      return;
+    }
+    if (state.tool === "fill"){
+      pushUndo([state.activeLayer]);
+      floodFill(activeCtx(), Math.round(p.x), Math.round(p.y), state.color);
+      return;
+    }
+    if (state.tool === "text"){
+      placeTextAt(p);
+      return;
+    }
+    if (state.tool === "shape"){
+      interaction.setPointerCapture(e.pointerId);
+      state.shaping = true;
+      state.shapeStart = p;
+      ctxInteraction.clearRect(0, 0, CANVAS_W, CANVAS_H);
+      return;
+    }
+    if (state.tool === "select"){
+      interaction.setPointerCapture(e.pointerId);
+      state.selecting = true;
+      state.selectionMoved = false;
+      state.selectionStart = p;
+      ctxInteraction.clearRect(0, 0, CANVAS_W, CANVAS_H);
+      return;
+    }
+
+    interaction.setPointerCapture(e.pointerId);
+    pushUndo([state.activeLayer]);
+    state.drawing = true;
     state.currentStroke = [p];
   }
 
   function onPointerMove(e){
     updateBrushCursor(e);
+
+    if (state.tool === "select" && state.selecting){
+      const p = getPos(e);
+      state.selectionMoved = true;
+      drawSelectionPreview(state.selectionStart, p);
+      return;
+    }
+    if (state.tool === "shape" && state.shaping){
+      const p = getPos(e);
+      drawShapePreview(normalizeRect(state.shapeStart, p));
+      return;
+    }
     if (!state.drawing) return;
     const p = getPos(e);
     const last = state.currentStroke[state.currentStroke.length - 1];
@@ -764,6 +794,42 @@
   }
 
   function onPointerUp(e){
+    if (state.tool === "shape" && state.shaping){
+      state.shaping = false;
+      try{ interaction.releasePointerCapture(e.pointerId); }catch(err){}
+      ctxInteraction.clearRect(0, 0, CANVAS_W, CANVAS_H);
+      const rect = normalizeRect(state.shapeStart, getPos(e));
+      if (rect.w > 3 && rect.h > 3){
+        pushUndo([state.activeLayer]);
+        drawShape(activeCtx(), state.shapeType, rect, state.shapeFill, state.shapeOutline);
+        state.shapeObjects.push({rect:rect,type:state.shapeType,fill:state.shapeFill,outline:state.shapeOutline,layer:state.activeLayer});
+      }
+      state.shapeStart = null;
+      return;
+    }
+    if (state.tool === "select" && state.selecting){
+      state.selecting = false;
+      try{ interaction.releasePointerCapture(e.pointerId); }catch(err){}
+      if (!state.selectionMoved){
+        const hit = findShapeAt(getPos(e));
+        if (hit){
+          state.selectedShape = hit;
+          state.selectionRect = hit.rect;
+          state.shapeType = hit.type;
+          state.shapeFill = hit.fill;
+          state.shapeOutline = hit.outline;
+          shapeFillToggle.checked = hit.fill;
+          shapeOutlineToggle.checked = hit.outline;
+          drawSelectionOverlay(hit.rect);
+          shapePanel.hidden = false;
+        } else {
+          state.selectedShape = null;
+          deselect();
+        }
+      }
+      updateSelectionButtons();
+      return;
+    }
     if (!state.drawing) return;
     state.drawing = false;
     try{ interaction.releasePointerCapture(e.pointerId); }catch(err){}
@@ -776,9 +842,15 @@
       commitStroke(pts);
     }
     state.currentStroke = [];
+
+    if (state.selectionRect) drawSelectionOverlay(state.selectionRect);
   }
 
   function updateBrushCursor(e){
+    if (state.tool !== "pen" && state.tool !== "eraser"){
+      brushCursorEl.style.display = "none";
+      return;
+    }
     const stageRect = stageEl.getBoundingClientRect();
     const interactionRect = interaction.getBoundingClientRect();
     const displayScale = interactionRect.width / interaction.width;
@@ -793,27 +865,67 @@
   interaction.addEventListener("pointermove", onPointerMove);
   window.addEventListener("pointerup", onPointerUp);
   window.addEventListener("pointercancel", onPointerUp);
-  interaction.addEventListener("pointerenter", function(){ brushCursorEl.style.display = "block"; });
+  interaction.addEventListener("pointerenter", function(){
+    if (state.tool === "pen" || state.tool === "eraser") brushCursorEl.style.display = "block";
+  });
   interaction.addEventListener("pointerleave", function(){ brushCursorEl.style.display = "none"; });
 
   /* =========================================================
      ツール切り替え
   ========================================================= */
-  document.querySelectorAll(".tool-btn").forEach(function(btn){
-    btn.addEventListener("click", function(){
-      document.querySelectorAll(".tool-btn").forEach(function(b){ b.classList.remove("active"); });
-      btn.classList.add("active");
-      state.tool = btn.dataset.tool;
-      brushCursorEl.classList.toggle("eraser-cursor", state.tool === "eraser");
-      updateWidthPreview();
+  function updateInteractionCursor(){
+    const map = { pen:"none", eraser:"none", eyedropper:"crosshair", fill:"pointer", shape:"crosshair", select:"crosshair", text:"text" };
+    interaction.style.cursor = map[state.tool] || "default";
+  }
+
+  function setGroupRelevance(el, relevant){
+    if (!el) return;
+    el.style.opacity = relevant ? "1" : "0.35";
+    el.style.pointerEvents = relevant ? "" : "none";
+  }
+
+  function updateOptionsBarRelevance(){
+    setGroupRelevance(colorOptGroup, ["pen","fill","shape","text"].indexOf(state.tool) !== -1);
+    setGroupRelevance(widthOptGroup, ["pen","eraser","shape","text"].indexOf(state.tool) !== -1);
+    setGroupRelevance(aiOptGroup, state.tool === "pen");
+  }
+
+  function selectTool(name){
+    const wasSameTool = state.tool === name;
+    state.tool = name;
+    document.querySelectorAll(".tool-icon-btn").forEach(function(b){
+      b.classList.toggle("active", b.dataset.tool === name);
     });
+    const isBrushTool = (name === "pen" || name === "eraser");
+    shapePanel.hidden = name !== "shape" || wasSameTool;
+    brushCursorEl.classList.toggle("eraser-cursor", name === "eraser");
+    if (!isBrushTool) brushCursorEl.style.display = "none";
+    updateInteractionCursor();
+    updateWidthLabelForTool();
+    updateWidthPreview();
+    updateOptionsBarRelevance();
+    updateStatusBar();
+  }
+
+  document.querySelectorAll(".tool-icon-btn").forEach(function(btn){
+    btn.addEventListener("click", function(){ selectTool(btn.dataset.tool); });
+  });
+
+  renderShapePalette();
+  shapeFillToggle.addEventListener("change", function(e){ state.shapeFill = e.target.checked; });
+  shapeOutlineToggle.addEventListener("change", function(e){ state.shapeOutline = e.target.checked; });
+  shapePanelClose.addEventListener("click", function(){ shapePanel.hidden = true; });
+  document.addEventListener("pointerdown", function(e){
+    if (shapePanel.hidden) return;
+    if (!shapePanel.contains(e.target) && !e.target.closest('[data-tool="shape"]')) shapePanel.hidden = true;
   });
 
   /* =========================================================
      カラー・線幅
   ========================================================= */
   function updateWidthPreview(){
-    const size = Math.min(state.lineWidth, 34);
+    if (!widthPreview) return;
+    const size = Math.min(state.lineWidth, 28);
     widthPreview.style.width = size + "px";
     widthPreview.style.height = size + "px";
     if (state.tool === "eraser"){
@@ -825,16 +937,136 @@
     }
   }
 
-  colorInput.addEventListener("input", function(e){
-    state.color = e.target.value;
-    colorHexLabel.textContent = e.target.value;
+  function updateWidthLabelForTool(){
+    if (state.tool === "text"){
+      widthLabelEl.textContent = "文字サイズ";
+      widthValueLabel.textContent = getTextFontSize() + "px";
+    } else {
+      widthLabelEl.textContent = "線の太さ";
+      widthValueLabel.textContent = state.lineWidth + "px";
+    }
+  }
+
+  function setColor(hex){
+    state.color = hex;
+    colorInput.value = hex;
+    colorHexLabel.textContent = hex.toLowerCase();
     updateWidthPreview();
+    highlightActiveSwatch();
+  }
+
+  function highlightActiveSwatch(){
+    document.querySelectorAll(".swatch").forEach(function(sw){
+      sw.classList.toggle("active", sw.dataset.color.toLowerCase() === state.color.toLowerCase());
+    });
+  }
+
+  colorInput.addEventListener("input", function(e){ setColor(e.target.value); });
+
+  document.querySelectorAll(".swatch").forEach(function(sw){
+    sw.addEventListener("click", function(){ setColor(sw.dataset.color); });
   });
 
   widthInput.addEventListener("input", function(e){
     state.lineWidth = Number(e.target.value);
-    widthValueLabel.textContent = state.lineWidth + "px";
+    updateWidthLabelForTool();
     updateWidthPreview();
+  });
+
+  /* =========================================================
+     描画枠サイズのカスタマイズ
+  ========================================================= */
+  const SIZE_PRESETS = [
+    ["正方形",800,800,"circle"],["アイコン",512,512,"circle"],["小正方形",640,640,"circle"],["大正方形",1200,1200,"circle"],["正方形HD",1600,1600,"circle"],
+    ["写真 4:3",1200,900,"oval"],["写真 3:2",1200,800,"oval"],["写真 5:4",1250,1000,"oval"],["写真 16:9",1600,900,"wide"],["写真 21:9",1680,720,"wide"],
+    ["縦写真 3:4",900,1200,"tall"],["縦写真 2:3",800,1200,"tall"],["縦写真 4:5",960,1200,"tall"],["縦動画 9:16",720,1280,"tall"],["縦長 9:21",720,1680,"tall"],
+    ["カード",1050,600,"wide"],["名刺",1050,600,"wide"],["バナー",1600,400,"wide"],["ヘッダー",1440,360,"wide"],["超横長",2000,500,"wide"],
+    ["ポスター",800,1200,"tall"],["A4縦",794,1123,"tall"],["A4横",1123,794,"wide"],["レター縦",816,1056,"tall"],["レター横",1056,816,"wide"],
+    ["壁紙 HD",1366,768,"wide"],["壁紙 QHD",2560,1440,"wide"],["SNS投稿",1080,1080,"circle"],["SNS縦",1080,1350,"tall"],["SNS横",1200,630,"pill"]
+  ];
+
+  function renderSizePresets(){
+    sizePresetGrid.innerHTML = SIZE_PRESETS.map(function(item, index){
+      return '<button type="button" class="size-preset" data-preset-index="'+index+'" title="'+item[0]+' '+item[1]+'×'+item[2]+'px"><span class="preset-shape '+item[3]+'"></span><span class="preset-label">'+item[0]+'</span></button>';
+    }).join('');
+    sizePresetGrid.querySelectorAll('.size-preset').forEach(function(button){
+      button.addEventListener('click', function(){
+        const preset = SIZE_PRESETS[Number(button.dataset.presetIndex)];
+        resizeCanvas(preset[1], preset[2]);
+        selectSizePreset(preset[1], preset[2]);
+      });
+    });
+  }
+
+  function selectSizePreset(width, height){
+    sizePresetGrid.querySelectorAll('.size-preset').forEach(function(button){
+      const preset = SIZE_PRESETS[Number(button.dataset.presetIndex)];
+      button.classList.toggle('selected', preset[1] === width && preset[2] === height);
+    });
+  }
+
+  function syncSizeInputs(){
+    canvasWidthInput.value = String(CANVAS_W);
+    canvasHeightInput.value = String(CANVAS_H);
+    selectSizePreset(CANVAS_W, CANVAS_H);
+  }
+
+  function resizeCanvas(newWidth, newHeight){
+    newWidth = clamp(Math.round(newWidth), 64, 4096);
+    newHeight = clamp(Math.round(newHeight), 64, 4096);
+    if (newWidth === CANVAS_W && newHeight === CANVAS_H) return;
+
+    pushUndo(["base", "line"]);
+    const oldWidth = CANVAS_W;
+    const oldHeight = CANVAS_H;
+    const snapshots = [canvasBase, canvasLine].map(function(canvas){
+      const temp = document.createElement("canvas");
+      temp.width = oldWidth;
+      temp.height = oldHeight;
+      temp.getContext("2d").drawImage(canvas, 0, 0);
+      return temp;
+    });
+
+    CANVAS_W = newWidth;
+    CANVAS_H = newHeight;
+    [canvasBase, canvasLine, interaction].forEach(function(canvas){
+      canvas.width = CANVAS_W;
+      canvas.height = CANVAS_H;
+    });
+    snapshots.forEach(function(temp, index){
+      const ctx = index === 0 ? ctxBase : ctxLine;
+      ctx.drawImage(temp, 0, 0, oldWidth, oldHeight, 0, 0, CANVAS_W, CANVAS_H);
+    });
+    state.selectionRect = null;
+    syncSizeInputs();
+    updateStatusBar();
+    applyZoom();
+    selectSizePreset(CANVAS_W, CANVAS_H);
+    updateUndoRedoButtons();
+  }
+
+  function closeSizePanel(){
+    sizePanel.hidden = true;
+    sizeBtn.setAttribute("aria-expanded", "false");
+  }
+
+  function applySizeFromInputs(){
+    resizeCanvas(Number(canvasWidthInput.value), Number(canvasHeightInput.value));
+    closeSizePanel();
+  }
+
+  renderSizePresets();
+  sizeBtn.addEventListener("click", function(){
+    syncSizeInputs();
+    sizePanel.hidden = !sizePanel.hidden;
+    sizeBtn.setAttribute("aria-expanded", String(!sizePanel.hidden));
+    if (!sizePanel.hidden) canvasWidthInput.focus();
+  });
+  sizeCancelBtn.addEventListener("click", closeSizePanel);
+  sizeApplyBtn.addEventListener("click", applySizeFromInputs);
+  sizePanel.addEventListener("keydown", function(e){
+    if (e.key === "Enter") applySizeFromInputs();
+    if (e.key === "Escape") closeSizePanel();
   });
 
   /* =========================================================
@@ -846,7 +1078,7 @@
       document.querySelectorAll(".layer-item").forEach(function(i){ i.classList.remove("active"); });
       item.classList.add("active");
       state.activeLayer = item.dataset.layer;
-      updateUndoButton();
+      updateStatusBar();
     });
   });
 
@@ -861,18 +1093,28 @@
   });
 
   /* =========================================================
-     クリア・元に戻す・PNG書き出し
+     クリア・元に戻す／やり直し・左右反転・PNG書き出し
   ========================================================= */
   clearBtn.addEventListener("click", function(){
     const layer = state.activeLayer;
-    const layerName = layer === "line" ? "線画" : "下塗り";
-    if (!window.confirm("「" + layerName + "」レイヤーの内容をすべて消去します。よろしいですか？")) return;
-    pushUndo(layer);
+    const layerName = LAYER_NAMES[layer] || layer;
+    pushUndo([layer]);
     const ctx = layer === "base" ? ctxBase : ctxLine;
     ctx.clearRect(0, 0, CANVAS_W, CANVAS_H);
+    updateStatusBar();
   });
 
+  clearSelectionBtn.addEventListener("click", eraseSelectionArea);
+
   undoBtn.addEventListener("click", undo);
+  redoBtn.addEventListener("click", redo);
+
+  flipBtn.addEventListener("click", function(){
+    pushUndo(["base", "line"]);
+    flipCanvasHorizontal(ctxBase);
+    flipCanvasHorizontal(ctxLine);
+    if (state.selectionRect) deselect();
+  });
 
   saveBtn.addEventListener("click", function(){
     const exportCanvas = document.createElement("canvas");
@@ -921,12 +1163,17 @@
   });
 
   /* =========================================================
-     AI補正設定
+     AI補正設定（ツールオプションバーの簡易トグルと同期）
   ========================================================= */
-  smoothToggle.addEventListener("change", function(e){
-    state.smoothing.enabled = e.target.checked;
-    strengthBlock.classList.toggle("is-hidden", !state.smoothing.enabled);
-  });
+  function setSmoothingEnabled(enabled){
+    state.smoothing.enabled = enabled;
+    smoothToggle.checked = enabled;
+    smoothToggleQuick.checked = enabled;
+    strengthBlock.classList.toggle("is-hidden", !enabled);
+  }
+
+  smoothToggle.addEventListener("change", function(e){ setSmoothingEnabled(e.target.checked); });
+  smoothToggleQuick.addEventListener("change", function(e){ setSmoothingEnabled(e.target.checked); });
 
   strengthInput.addEventListener("input", function(e){
     state.smoothing.strength = Number(e.target.value);
@@ -934,11 +1181,51 @@
   });
 
   /* =========================================================
+     キーボードショートカット
+  ========================================================= */
+  window.addEventListener("keydown", function(e){
+    const tag = (e.target && e.target.tagName || "").toLowerCase();
+    if (tag === "input" || tag === "textarea") return;
+
+    const key = e.key.toLowerCase();
+
+    if ((e.ctrlKey || e.metaKey) && key === "z" && !e.shiftKey){
+      e.preventDefault(); undo(); return;
+    }
+    if ((e.ctrlKey || e.metaKey) && (key === "y" || (key === "z" && e.shiftKey))){
+      e.preventDefault(); redo(); return;
+    }
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+    if (e.key === "Delete" || e.key === "Backspace"){
+      if (state.selectionRect){ e.preventDefault(); eraseSelectionArea(); }
+      return;
+    }
+    if (e.key === "Escape"){
+      if (state.selectionRect) deselect();
+      return;
+    }
+    const toolMap = { p:"pen", e:"eraser", i:"eyedropper", g:"fill", s:"shape", r:"select", t:"text" };
+    if (toolMap[key]) selectTool(toolMap[key]);
+  });
+
+  /* =========================================================
      起動
   ========================================================= */
+  let applyZoom = function(){};
   init();
+  (function(){
+    const zoomInput=document.getElementById('zoomInput');
+    const zoomValue=document.getElementById('zoomValue');
+    const stageWrap=document.getElementById('stageWrap');
+    applyZoom = function(){ const z=Number(zoomInput.value)/100; stageWrap.style.width=(CANVAS_W*z)+'px'; stageWrap.style.height=(CANVAS_H*z)+'px'; stageEl.style.width=CANVAS_W+'px'; stageEl.style.height=CANVAS_H+'px'; stageEl.style.transform='scale('+z+')'; stageEl.style.transformOrigin='top left'; zoomValue.textContent=Math.round(z*100)+'%'; };
+    zoomInput.addEventListener('input',applyZoom); applyZoom();
+  })();
+
 
 })();
 </script>
-</body>
-</html>
+
+
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v31edd6df95cf4e85bb4c19e7a9bdbcba1788362987495" integrity="sha512-iIg7k2xntmwu6/uSb5tpc/hySgZc4eoL31yB29W6tJFo2akwjPWcEqnCEdJvGexCL0KEQwVYv5BlowfhVz26hg==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","spa":2}' crossorigin="anonymous"></script>
+</body></html>
