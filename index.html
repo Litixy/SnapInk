@@ -55,6 +55,16 @@ body.dark .bar{background:rgba(25,34,55,.42)}
 body.dark .canvas-area{background:linear-gradient(145deg,rgba(44,53,91,.82),rgba(52,42,83,.72))}
 body.dark .size-panel,body.dark .shape-panel,body.dark .inline-text-editor{background:rgba(31,42,68,.9);color:#e8efff}
 body.dark .inline-text-editor textarea{background:rgba(10,18,36,.5);color:#f1f5ff;border-color:rgba(145,160,255,.32)}
+
+.mobile-actions{display:none}
+@media(max-width:850px){
+  .mobile-actions{display:flex;position:relative;z-index:4;gap:8px;padding:7px 8px calc(7px + env(safe-area-inset-bottom));background:rgba(255,255,255,.34);backdrop-filter:blur(20px) saturate(150%);-webkit-backdrop-filter:blur(20px) saturate(150%);border:1px solid var(--glass-border);border-top:0;border-radius:0 0 20px 20px;box-shadow:0 10px 28px rgba(76,92,138,.08)}
+  .mobile-actions button{flex:1;min-height:40px;border:1px solid var(--line);border-radius:13px;background:var(--glass-soft);color:var(--text);display:flex;align-items:center;justify-content:center;gap:7px;font-size:15px;box-shadow:inset 0 1px 0 rgba(255,255,255,.55)}
+  .mobile-actions button span{font-size:10px;color:var(--muted)}
+  .mobile-actions button:disabled{opacity:.38}
+  .mobile-actions .danger{color:var(--danger)}
+}
+body.dark .mobile-actions{background:rgba(25,34,55,.55)}
 </style></head><body><div class="app">
   <header class="header">
     <div class="logo" aria-label="SnapInk logo"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjggMTI4Ij4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iZyIgeDE9IjE0IiB5MT0iMTAiIHgyPSIxMTYiIHkyPSIxMTgiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KICAgICAgPHN0b3Agc3RvcC1jb2xvcj0iIzZGODZGRiIvPjxzdG9wIG9mZnNldD0iLjUyIiBzdG9wLWNvbG9yPSIjQTU4QkZGIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjRkY5QkM4Ii8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJnMiIgeDE9IjM2IiB5MT0iMjIiIHgyPSI5NSIgeTI9Ijk4IiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CiAgICAgIDxzdG9wIHN0b3AtY29sb3I9IiNGRkZGRkYiIHN0b3Atb3BhY2l0eT0iLjk1Ii8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjRjJGNUZGIiBzdG9wLW9wYWNpdHk9Ii43OCIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICAgIDxmaWx0ZXIgaWQ9InNoYWRvdyIgeD0iLTMwJSIgeT0iLTMwJSIgd2lkdGg9IjE2MCUiIGhlaWdodD0iMTYwJSI+CiAgICAgIDxmZURyb3BTaGFkb3cgZHg9IjAiIGR5PSI4IiBzdGREZXZpYXRpb249IjgiIGZsb29kLWNvbG9yPSIjNDY1NkE1IiBmbG9vZC1vcGFjaXR5PSIuMjIiLz4KICAgIDwvZmlsdGVyPgogIDwvZGVmcz4KICA8cmVjdCB4PSI2IiB5PSI2IiB3aWR0aD0iMTE2IiBoZWlnaHQ9IjExNiIgcng9IjMzIiBmaWxsPSJ1cmwoI2cpIiBmaWx0ZXI9InVybCgjc2hhZG93KSIvPgogIDxyZWN0IHg9IjkiIHk9IjkiIHdpZHRoPSIxMTAiIGhlaWdodD0iMTEwIiByeD0iMzAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI0ZGRkZGRiIgc3Ryb2tlLW9wYWNpdHk9Ii4zNCIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgPHBhdGggZD0iTTM2IDgzYzE4IDEwIDQ2IDMgNTQtMTQgNy0xNC00LTI1LTE4LTIxLTExIDMtMTgtMS0xNy05IDItMTAgMTQtMTcgMzEtMTYiIGZpbGw9Im5vbmUiIHN0cm9rZT0idXJsKCNnMikiIHN0cm9rZS13aWR0aD0iMTEiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogIDxwYXRoIGQ9Ik0zOCA4MGMxMiA2IDMwIDQgNDAtMyIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRkZGRkZGIiBzdHJva2Utb3BhY2l0eT0iLjcyIiBzdHJva2Utd2lkdGg9IjIuNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+Cjwvc3ZnPgo=" alt="SnapInk"></div><div class="brand">SnapInk</div><div class="sub">かんたんに、自由に描く</div>
@@ -100,7 +110,7 @@ body.dark .inline-text-editor textarea{background:rgba(10,18,36,.5);color:#f1f5f
   </section>
   <div class="main">
     <aside class="tools" id="toolDock">
-      <button type="button" class="tool tool-icon-btn active" data-tool="pen" title="鉛筆"><span>✎</span></button>
+      <button type="button" class="tool tool-icon-btn active" data-tool="pen" title="ペン"><span>✎</span></button>
       <button type="button" class="tool tool-icon-btn" data-tool="eraser" title="消しゴム"><span>▱</span></button>
       <button type="button" class="tool tool-icon-btn" data-tool="eyedropper" title="スポイト"><span>⌕</span></button>
       <button type="button" class="tool tool-icon-btn" data-tool="fill" title="塗りつぶし"><span>◒</span></button>
@@ -113,7 +123,7 @@ body.dark .inline-text-editor textarea{background:rgba(10,18,36,.5);color:#f1f5f
         <div class="bar-group"><input class="color" type="color" id="colorInput" value="#1a1a1a" title="色"><span class="val" id="colorHexLabel">#1a1a1a</span></div>
         <div class="bar-group color-adjust" title="色の鮮明さと明暗"><label for="saturationInput">鮮明</label><input class="micro-range" id="saturationInput" type="range" min="0" max="100" value="100"><span class="val" id="saturationValue">100</span></div>
         <div class="bar-group color-adjust" title="色の明るさ"><label for="lightnessInput">明暗</label><input class="micro-range" id="lightnessInput" type="range" min="10" max="95" value="50"><span class="val" id="lightnessValue">50</span></div>
-        <div class="bar-group brush-style-group" id="brushStyleGroup"><label for="brushStyleInput">筆</label><select id="brushStyleInput" title="鉛筆 / ブラシ"><option value="pencil">鉛筆</option><option value="brush">ブラシ</option></select></div>
+        <div class="bar-group brush-style-group" id="brushStyleGroup"><label for="brushStyleInput">種類</label><select id="brushStyleInput" title="マーカー / ペン"><option value="marker">マーカー</option><option value="pen">ペン</option></select></div>
         <div class="bar-group shape-selection-controls" id="shapeSelectionControls" hidden><label>図形</label><input id="shapeXInput" type="number" title="X"><input id="shapeYInput" type="number" title="Y"><input id="shapeWidthInput" type="number" min="4" max="4096" title="幅"><input id="shapeHeightInput" type="number" min="4" max="4096" title="高さ"><input id="shapeRotationInput" type="number" min="-180" max="180" title="角度"><span class="shape-angle-unit">°</span></div>
         <div class="bar-group"><label for="widthInput">太さ</label><input class="range" id="widthInput" type="range" min="1" max="60" value="4"><span class="val" id="widthValueLabel">4px</span></div>
         <div class="bar-group"><label class="toggle"><input type="checkbox" id="smoothToggleQuick" checked><span class="switch"></span>なめらか</label></div>
@@ -127,6 +137,7 @@ body.dark .inline-text-editor textarea{background:rgba(10,18,36,.5);color:#f1f5f
     </section>
   </div>
   <footer class="bottom"><div class="status" id="statusBar">ペン ・ 1100×720px</div><div class="hint">P ペン　E 消しゴム　Ctrl+Z 元に戻す　Delete 選択範囲を消去</div></footer>
+  <div class="mobile-actions" id="mobileActions" aria-label="モバイル操作"><button id="mobileUndo" type="button" title="元に戻す">↶<span>戻す</span></button><button id="mobileRedo" type="button" title="やり直す">↷<span>やり直し</span></button><button id="mobileDelete" type="button" class="danger" title="選択したものを削除">⌫<span>削除</span></button></div>
 
   <div class="hidden-ui">
     <label class="switch"><input type="checkbox" id="smoothToggle" checked></label><div id="strengthBlock"><input type="range" id="strengthInput" min="0" max="100" value="40"><span id="strengthValueLabel">40</span></div><div id="smoothStatus"></div>
@@ -144,7 +155,7 @@ body.dark .inline-text-editor textarea{background:rgba(10,18,36,.5);color:#f1f5f
   let CANVAS_H = 720;
   const UNDO_LIMIT = 20;
 
-  const TOOL_NAMES = { pen:"鉛筆", eraser:"消しゴム", eyedropper:"スポイト", fill:"塗りつぶし", shape:"図形", select:"ポインター" };
+  const TOOL_NAMES = { pen:"ペン", eraser:"消しゴム", eyedropper:"スポイト", fill:"塗りつぶし", shape:"図形", select:"ポインター" };
   const LAYER_NAMES = { line:"線画", base:"下塗り" };
 
   const state = {
@@ -154,7 +165,7 @@ body.dark .inline-text-editor textarea{background:rgba(10,18,36,.5);color:#f1f5f
     shapeOutline: true,
     color: "#1a1a1a",
     lineWidth: 4,
-    brushStyle: "pencil",
+    brushStyle: "marker",
     colorHsl: {h:0,s:0,l:10},
     textStyle: { fontFamily:"-apple-system,BlinkMacSystemFont,\"SF Pro Text\",\"Hiragino Kaku Gothic ProN\",\"Yu Gothic\",Meiryo,sans-serif", fontSize:40, fontWeight:400, italic:false, underline:false, align:"left" },
     activeLayer: "line",
@@ -246,6 +257,9 @@ body.dark .inline-text-editor textarea{background:rgba(10,18,36,.5);color:#f1f5f
   const clearSelectionBtn = document.getElementById("clearSelectionBtn");
   const saveBtn = document.getElementById("saveBtn");
   const statusBarEl = document.getElementById("statusBar");
+  const mobileUndo = document.getElementById("mobileUndo");
+  const mobileRedo = document.getElementById("mobileRedo");
+  const mobileDelete = document.getElementById("mobileDelete");
 
 
   const smoothToggle = document.getElementById("smoothToggle");
@@ -307,9 +321,9 @@ body.dark .inline-text-editor textarea{background:rgba(10,18,36,.5);color:#f1f5f
      描画スタイル適用
   ========================================================= */
   function applyStrokeStyle(ctx){
-    ctx.lineCap = state.brushStyle === "pencil" ? "round" : "round";
+    ctx.lineCap = state.brushStyle === "marker" ? "round" : "round";
     ctx.lineJoin = "round";
-    ctx.lineWidth = state.lineWidth;
+    ctx.lineWidth = state.lineWidth * (state.brushStyle === "marker" ? 1.18 : 1);
     if (state.tool === "eraser"){
       ctx.globalCompositeOperation = "destination-out";
       ctx.globalAlpha = 1;
@@ -317,18 +331,18 @@ body.dark .inline-text-editor textarea{background:rgba(10,18,36,.5);color:#f1f5f
       ctx.fillStyle = "rgba(0,0,0,1)";
     } else {
       ctx.globalCompositeOperation = "source-over";
-      ctx.globalAlpha = state.brushStyle === "pencil" ? 0.78 : 1;
+      ctx.globalAlpha = state.brushStyle === "marker" ? 0.38 : 1;
       ctx.strokeStyle = state.color;
       ctx.fillStyle = state.color;
     }
   }
 
   function previewStyle(ctx){
-    ctx.lineCap = state.brushStyle === "pencil" ? "round" : "round";
+    ctx.lineCap = state.brushStyle === "marker" ? "round" : "round";
     ctx.lineJoin = "round";
-    ctx.lineWidth = state.lineWidth * (state.brushStyle === "pencil" ? 0.78 : 1.08);
+    ctx.lineWidth = state.lineWidth * (state.brushStyle === "marker" ? 1.18 : 1);
     ctx.globalCompositeOperation = "source-over";
-    ctx.globalAlpha = state.tool === "eraser" ? 0.55 : (state.brushStyle === "pencil" ? 0.78 : 1);
+    ctx.globalAlpha = state.tool === "eraser" ? 0.55 : (state.brushStyle === "marker" ? 0.38 : 1);
     ctx.strokeStyle = (state.tool === "eraser") ? "rgba(120,130,150,1)" : state.color;
   }
 
@@ -384,8 +398,12 @@ body.dark .inline-text-editor textarea{background:rgba(10,18,36,.5);color:#f1f5f
   }
 
   function updateUndoRedoButtons(){
-    undoBtn.disabled = undoStack.length === 0;
-    redoBtn.disabled = redoStack.length === 0;
+    const canUndo = undoStack.length > 0, canRedo = redoStack.length > 0;
+    undoBtn.disabled = !canUndo;
+    redoBtn.disabled = !canRedo;
+    if(mobileUndo) mobileUndo.disabled = !canUndo;
+    if(mobileRedo) mobileRedo.disabled = !canRedo;
+    if(mobileDelete) mobileDelete.disabled = !(state.selectedShape || (state.selectionRect && state.selectionRect.w > 0 && state.selectionRect.h > 0));
   }
 
   /* =========================================================
@@ -832,6 +850,7 @@ body.dark .inline-text-editor textarea{background:rgba(10,18,36,.5);color:#f1f5f
   function updateSelectionButtons(){
     const has = !!(state.selectionRect && state.selectionRect.w > 0 && state.selectionRect.h > 0);
     clearSelectionBtn.disabled = !has;
+    if(mobileDelete) mobileDelete.disabled = !(state.selectedShape || has);
     updateStatusBar();
   }
 
@@ -920,7 +939,8 @@ body.dark .inline-text-editor textarea{background:rgba(10,18,36,.5);color:#f1f5f
         pushUndo(["shapes"]); state.shapeTransforming={type:"move",shape:selected,startX:p.x,startY:p.y,baseX:selected.rect.x,baseY:selected.rect.y}; return;
       }
       state.selectedShape=null; state.selectionRect=null; updateShapeEditUI();
-      state.selecting=true; state.selectionMoved=false; state.selectionStart=p; ctxInteraction.clearRect(0,0,CANVAS_W,CANVAS_H); return;
+      ctxInteraction.clearRect(0,0,CANVAS_W,CANVAS_H);
+      state.selecting=true; state.selectionMoved=false; state.selectionStart=p; return;
     }
 
     interaction.setPointerCapture(e.pointerId);
@@ -982,6 +1002,14 @@ body.dark .inline-text-editor textarea{background:rgba(10,18,36,.5);color:#f1f5f
       state.selecting = false;
       try{ interaction.releasePointerCapture(e.pointerId); }catch(err){}
       const dragRect = normalizeRect(state.selectionStart, getPos(e));
+      if (dragRect.w >= 3 && dragRect.h >= 3){
+        state.selectedShape = null;
+        state.selectionRect = dragRect;
+        drawSelectionOverlay(dragRect);
+        updateShapeEditUI();
+        updateSelectionButtons();
+        return;
+      }
       if (dragRect.w < 3 && dragRect.h < 3){
         const hit = findShapeAt(getPos(e));
         if (hit){
@@ -1191,7 +1219,7 @@ body.dark .inline-text-editor textarea{background:rgba(10,18,36,.5);color:#f1f5f
     updateWidthPreview();
   });
 
-  brushStyleInput.addEventListener("change", function(e){ state.brushStyle = e.target.value === "brush" ? "brush" : "pencil"; });
+  brushStyleInput.addEventListener("change", function(e){ state.brushStyle = e.target.value === "pen" ? "pen" : "marker"; });
   themeToggle.addEventListener("click", function(){
     const dark = !document.body.classList.contains("dark");
     document.body.classList.toggle("dark", dark); themeToggle.textContent = dark ? "☀" : "☾"; themeToggle.setAttribute("aria-pressed", String(dark));
@@ -1315,6 +1343,12 @@ body.dark .inline-text-editor textarea{background:rgba(10,18,36,.5);color:#f1f5f
 
   undoBtn.addEventListener("click", undo);
   redoBtn.addEventListener("click", redo);
+  if(mobileUndo) mobileUndo.addEventListener("click", undo);
+  if(mobileRedo) mobileRedo.addEventListener("click", redo);
+  if(mobileDelete) mobileDelete.addEventListener("click", function(){
+    if(state.selectedShape){ deleteSelectedShape(); return; }
+    if(state.selectionRect){ eraseSelectionArea(); }
+  });
 
   flipBtn.addEventListener("click", function(){
     pushUndo(["base","line","shapes"]);
