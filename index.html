@@ -1,32 +1,65 @@
-<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>SnapInk — かんたんに描く</title><style>
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjggMTI4Ij4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iZyIgeDE9IjE0IiB5MT0iMTAiIHgyPSIxMTYiIHkyPSIxMTgiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KICAgICAgPHN0b3Agc3RvcC1jb2xvcj0iIzZGODZGRiIvPjxzdG9wIG9mZnNldD0iLjUyIiBzdG9wLWNvbG9yPSIjQTU4QkZGIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjRkY5QkM4Ii8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJnMiIgeDE9IjM2IiB5MT0iMjIiIHgyPSI5NSIgeTI9Ijk4IiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CiAgICAgIDxzdG9wIHN0b3AtY29sb3I9IiNGRkZGRkYiIHN0b3Atb3BhY2l0eT0iLjk1Ii8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjRjJGNUZGIiBzdG9wLW9wYWNpdHk9Ii43OCIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICAgIDxmaWx0ZXIgaWQ9InNoYWRvdyIgeD0iLTMwJSIgeT0iLTMwJSIgd2lkdGg9IjE2MCUiIGhlaWdodD0iMTYwJSI+CiAgICAgIDxmZURyb3BTaGFkb3cgZHg9IjAiIGR5PSI4IiBzdGREZXZpYXRpb249IjgiIGZsb29kLWNvbG9yPSIjNDY1NkE1IiBmbG9vZC1vcGFjaXR5PSIuMjIiLz4KICAgIDwvZmlsdGVyPgogIDwvZGVmcz4KICA8cmVjdCB4PSI2IiB5PSI2IiB3aWR0aD0iMTE2IiBoZWlnaHQ9IjExNiIgcng9IjMzIiBmaWxsPSJ1cmwoI2cpIiBmaWx0ZXI9InVybCgjc2hhZG93KSIvPgogIDxyZWN0IHg9IjkiIHk9IjkiIHdpZHRoPSIxMTAiIGhlaWdodD0iMTEwIiByeD0iMzAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI0ZGRkZGRiIgc3Ryb2tlLW9wYWNpdHk9Ii4zNCIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgPHBhdGggZD0iTTM2IDgzYzE4IDEwIDQ2IDMgNTQtMTQgNy0xNC00LTI1LTE4LTIxLTExIDMtMTgtMS0xNy05IDItMTAgMTQtMTcgMzEtMTYiIGZpbGw9Im5vbmUiIHN0cm9rZT0idXJsKCNnMikiIHN0cm9rZS13aWR0aD0iMTEiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogIDxwYXRoIGQ9Ik0zOCA4MGMxMiA2IDMwIDQgNDAtMyIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRkZGRkZGIiBzdHJva2Utb3BhY2l0eT0iLjcyIiBzdHJva2Utd2lkdGg9IjIuNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+Cjwvc3ZnPgo="><link rel="shortcut icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjggMTI4Ij4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iZyIgeDE9IjE0IiB5MT0iMTAiIHgyPSIxMTYiIHkyPSIxMTgiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KICAgICAgPHN0b3Agc3RvcC1jb2xvcj0iIzZGODZGRiIvPjxzdG9wIG9mZnNldD0iLjUyIiBzdG9wLWNvbG9yPSIjQTU4QkZGIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjRkY5QkM4Ii8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJnMiIgeDE9IjM2IiB5MT0iMjIiIHgyPSI5NSIgeTI9Ijk4IiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CiAgICAgIDxzdG9wIHN0b3AtY29sb3I9IiNGRkZGRkYiIHN0b3Atb3BhY2l0eT0iLjk1Ii8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjRjJGNUZGIiBzdG9wLW9wYWNpdHk9Ii43OCIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICAgIDxmaWx0ZXIgaWQ9InNoYWRvdyIgeD0iLTMwJSIgeT0iLTMwJSIgd2lkdGg9IjE2MCUiIGhlaWdodD0iMTYwJSI+CiAgICAgIDxmZURyb3BTaGFkb3cgZHg9IjAiIGR5PSI4IiBzdGREZXZpYXRpb249IjgiIGZsb29kLWNvbG9yPSIjNDY1NkE1IiBmbG9vZC1vcGFjaXR5PSIuMjIiLz4KICAgIDwvZmlsdGVyPgogIDwvZGVmcz4KICA8cmVjdCB4PSI2IiB5PSI2IiB3aWR0aD0iMTE2IiBoZWlnaHQ9IjExNiIgcng9IjMzIiBmaWxsPSJ1cmwoI2cpIiBmaWx0ZXI9InVybCgjc2hhZG93KSIvPgogIDxyZWN0IHg9IjkiIHk9IjkiIHdpZHRoPSIxMTAiIGhlaWdodD0iMTEwIiByeD0iMzAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI0ZGRkZGRiIgc3Ryb2tlLW9wYWNpdHk9Ii4zNCIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgPHBhdGggZD0iTTM2IDgzYzE4IDEwIDQ2IDMgNTQtMTQgNy0xNC00LTI1LTE4LTIxLTExIDMtMTgtMS0xNy05IDItMTAgMTQtMTcgMzEtMTYiIGZpbGw9Im5vbmUiIHN0cm9rZT0idXJsKCNnMikiIHN0cm9rZS13aWR0aD0iMTEiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogIDxwYXRoIGQ9Ik0zOCA4MGMxMiA2IDMwIDQgNDAtMyIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRkZGRkZGIiBzdHJva2Utb3BhY2l0eT0iLjcyIiBzdHJva2Utd2lkdGg9IjIuNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+Cjwvc3ZnPgo="><title>SnapInk — かんたんに描く</title><style>
 :root{
- --bg:#17191d;--panel:#1f2228;--panel2:#262a31;--line:#353b46;--text:#eef1f5;--muted:#929baa;
- --accent:#6f8cff;--danger:#ff7474;--paper:#f7f7f7;--checker:#e5e7eb;
- --font-ui:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic",Meiryo,sans-serif;
+  --bg:#e9efff;--bg2:#f7f4ff;--glass:rgba(255,255,255,.66);--glass-strong:rgba(255,255,255,.84);--glass-soft:rgba(255,255,255,.42);
+  --glass-border:rgba(255,255,255,.82);--line:rgba(112,128,164,.18);--text:#28436e;--muted:#7f91ad;--accent:#7180ff;--danger:#e57d99;
+  --paper:#ffffff;--checker:#e9edf5;--input-bg:rgba(255,255,255,.55);
+  --font-ui:-apple-system,BlinkMacSystemFont,"SF Pro Text","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic",Meiryo,sans-serif;
 }
-*{box-sizing:border-box}html,body{height:100%;margin:0}body{font-family:var(--font-ui);background:var(--bg);color:var(--text);overflow:hidden}
-button,input{font:inherit;color:inherit}.app{height:100vh;display:flex;flex-direction:column}
-.header{height:48px;display:flex;align-items:center;gap:14px;padding:0 14px;background:var(--panel);border-bottom:1px solid var(--line);flex:none}
-.logo{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;overflow:hidden;background:linear-gradient(145deg,#8da4ff 0%,#6f8cff 45%,#5969dd 100%);box-shadow:0 5px 14px rgba(91,111,231,.28),inset 0 1px 0 rgba(255,255,255,.42);color:#fff}.logo svg{width:23px;height:23px;display:block;filter:drop-shadow(0 1px 1px rgba(31,38,92,.25))}.brand{font-weight:700;letter-spacing:.1px}.sub{color:var(--muted);font-size:11px;margin-left:2px}
-.header-spacer{flex:1}.header-btn{border:1px solid var(--line);background:var(--panel2);border-radius:8px;padding:6px 10px;cursor:pointer;font-size:12px}.header-btn:hover{background:#303641}.size-panel{position:fixed;z-index:80;top:56px;right:14px;width:370px;max-width:calc(100vw - 28px);max-height:calc(100vh - 90px);overflow:auto;padding:14px;border:1px solid var(--line);border-radius:10px;background:var(--panel);box-shadow:0 14px 36px rgba(0,0,0,.4)}.size-panel[hidden]{display:none}.size-panel h2{font-size:13px;margin:0 0 5px}.size-intro{display:block;margin-bottom:12px;color:var(--muted);font-size:10px}.size-preset-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}.size-preset{min-width:0;padding:7px 3px 6px;border:1px solid var(--line);border-radius:8px;background:var(--panel2);color:var(--muted);cursor:pointer}.size-preset:hover,.size-preset.selected{border-color:var(--accent);background:rgba(111,140,255,.15);color:var(--text)}.preset-shape{display:block;width:38px;height:26px;margin:0 auto 5px;border:1px solid currentColor;border-radius:4px;background:rgba(111,140,255,.16)}.preset-shape.circle{width:26px;border-radius:50%}.preset-shape.oval{border-radius:50%}.preset-shape.tall{width:22px;height:32px}.preset-shape.wide{width:42px;height:20px}.preset-shape.pill{height:17px;border-radius:999px}.preset-label{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:9px;text-align:center}.size-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.size-fields label{display:flex;flex-direction:column;gap:5px;font-size:11px;color:var(--muted)}.size-fields input{width:100%;padding:7px 8px;border:1px solid var(--line);border-radius:6px;background:var(--panel2)}.size-actions{display:flex;gap:8px;margin-top:12px}.size-actions button{flex:1;padding:7px;border:1px solid var(--line);border-radius:6px;background:var(--panel2);cursor:pointer;font-size:12px}.size-actions button.primary{background:var(--accent);border-color:var(--accent);color:#fff}.size-note{display:block;margin-top:9px;color:var(--muted);font-size:10px;line-height:1.4}.advanced-size{margin-top:12px;color:var(--muted);font-size:10px}.shape-panel{position:fixed;z-index:79;left:66px;top:56px;width:360px;max-width:calc(100vw - 80px);max-height:calc(100vh - 100px);overflow:auto;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--panel);box-shadow:0 14px 36px rgba(0,0,0,.4)}.shape-panel[hidden]{display:none}.shape-panel h2{font-size:13px;margin:0 0 5px}.shape-help{display:block;color:var(--muted);font-size:10px;margin-bottom:10px}.shape-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}.shape-choice{min-height:52px;padding:5px 2px;border:1px solid var(--line);border-radius:7px;background:var(--panel2);color:var(--muted);cursor:pointer}.shape-choice:hover,.shape-choice.selected{border-color:var(--accent);background:rgba(111,140,255,.15);color:var(--text)}.shape-glyph{display:block;height:27px;font-size:22px;line-height:25px;text-align:center;color:currentColor}.shape-label{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:9px;text-align:center}.shape-options{display:flex;align-items:center;gap:8px;margin-top:10px;color:var(--muted);font-size:11px}.shape-panel-close{width:100%;margin-top:10px;padding:6px;border:1px solid var(--line);border-radius:6px;background:var(--panel2);color:var(--muted);cursor:pointer;font-size:11px}.shape-panel-close:hover{color:var(--text);background:#303641}.shape-choice[data-shape="octagon"]{color:#ff78b7;border-color:rgba(255,120,183,.8)}.shape-choice[data-shape="octagon"]:hover,.shape-choice[data-shape="octagon"].selected{color:#ff9ac9;background:rgba(255,120,183,.16);border-color:#ff78b7}.shape-options input{accent-color:var(--accent)}.advanced-size summary{cursor:pointer}.advanced-size[open] .size-fields{margin-top:9px}
-.main{flex:1;min-height:0;display:flex}.tools{width:52px;background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;align-items:center;padding:8px 0;gap:5px;flex:none}
-.tool{width:36px;height:36px;border:1px solid transparent;background:transparent;border-radius:8px;color:var(--muted);cursor:pointer;display:grid;place-items:center}.tool:hover{background:#2b3038;color:#fff}.tool.active{background:rgba(111,140,255,.16);border-color:var(--accent);color:var(--accent)}
-.sep{width:24px;height:1px;background:var(--line);margin:4px 0}
-.center{min-width:0;flex:1;display:flex;flex-direction:column}.bar{height:48px;display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--panel);border-bottom:1px solid var(--line);flex:none}.bar-group{display:flex;align-items:center;gap:7px}.bar label{font-size:11px;color:var(--muted)}
-.icon{width:30px;height:30px;border:1px solid var(--line);background:var(--panel2);border-radius:7px;display:grid;place-items:center;cursor:pointer}.icon:hover{background:#303641}.icon.danger{color:var(--danger)}
-.color{width:30px;height:30px;border-radius:7px;padding:2px;border:1px solid var(--line);background:none}.range{width:100px}.val{font-size:11px;color:var(--muted);min-width:32px}.spacer{flex:1}
-.toggle{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);cursor:pointer}.toggle input{display:none}.switch{width:32px;height:18px;background:#454b56;border-radius:999px;position:relative}.switch:after{content:"";position:absolute;top:3px;left:3px;width:12px;height:12px;background:#fff;border-radius:50%;transition:.16s}.toggle input:checked+.switch{background:var(--accent)}.toggle input:checked+.switch:after{left:17px}
-.zoom{width:84px}.canvas-area{flex:1;min-height:0;overflow:auto;display:flex;align-items:center;justify-content:center;padding:20px;background:#111318;background-image:radial-gradient(#30343d 1px,transparent 1px);background-size:20px 20px}
-.stage-wrap{position:relative;flex:none}.canvas-stage{position:relative;width:1100px;height:720px;box-shadow:0 18px 50px rgba(0,0,0,.45);overflow:hidden;background-color:var(--paper);background-image:linear-gradient(45deg,var(--checker) 25%,transparent 25%),linear-gradient(-45deg,var(--checker) 25%,transparent 25%),linear-gradient(45deg,transparent 75%,var(--checker) 75%),linear-gradient(-45deg,transparent 75%,var(--checker) 75%);background-size:20px 20px;background-position:0 0,0 10px,10px -10px,-10px 0}
-.draw-layer{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}.draw-layer.hidden-layer{display:none}#interaction{pointer-events:auto;cursor:none;touch-action:none}.brush-cursor{position:absolute;z-index:20;pointer-events:none;border:1.5px solid var(--accent);border-radius:50%;transform:translate(-50%,-50%);display:none}.brush-cursor.eraser-cursor{border-color:#89919e;border-style:dashed;background:rgba(255,255,255,.2)}
-.bottom{height:38px;border-top:1px solid var(--line);background:var(--panel);display:flex;align-items:center;padding:0 10px;gap:10px;flex:none}.status{font-size:11px;color:var(--muted);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.hint{font-size:10px;color:#737b89}
+body.dark{
+  --bg:#182039;--bg2:#27243d;--glass:rgba(26,35,58,.66);--glass-strong:rgba(35,47,76,.88);--glass-soft:rgba(255,255,255,.09);
+  --glass-border:rgba(255,255,255,.16);--line:rgba(210,224,255,.14);--text:#eef4ff;--muted:#a8b5cf;--input-bg:rgba(255,255,255,.08);--paper:#fdfdff;--checker:#d9deea;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{font-family:var(--font-ui);color:var(--text);overflow:hidden;min-height:100dvh;background:
+ radial-gradient(900px 560px at 18% 20%,rgba(185,196,255,.6),transparent 62%),
+ radial-gradient(900px 620px at 86% 78%,rgba(194,170,255,.36),transparent 66%),
+ linear-gradient(135deg,var(--bg) 0%,var(--bg2) 48%,#e8f2ff 100%)}
+button,input,select,textarea{font:inherit;color:inherit}
+button,select,input[type="color"]{touch-action:manipulation}
+.app{height:100dvh;display:flex;flex-direction:column;position:relative;padding:16px 20px 20px;gap:0}
+.app:before{content:"";position:fixed;inset:10px 16px 12px;border-radius:32px;pointer-events:none;background:linear-gradient(145deg,rgba(255,255,255,.28),rgba(255,255,255,.08));box-shadow:0 35px 90px rgba(74,93,145,.2),inset 0 1px 0 rgba(255,255,255,.8);border:1px solid rgba(255,255,255,.48)}
+.header,.main,.bottom{position:relative;z-index:1}
+.header{height:74px;display:flex;align-items:center;gap:13px;padding:0 18px 0 28px;border:1px solid var(--glass-border);background:var(--glass);backdrop-filter:blur(28px) saturate(150%);-webkit-backdrop-filter:blur(28px) saturate(150%);border-radius:28px 28px 0 0;box-shadow:0 10px 32px rgba(76,92,138,.08);flex:none}
+.logo{width:48px;height:48px;margin-left:36px;border-radius:15px;display:grid;place-items:center;overflow:hidden;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.9);box-shadow:0 10px 24px rgba(105,112,215,.26),inset 0 1px 0 rgba(255,255,255,.78)}
+.logo img{width:100%;height:100%;display:block}
+.brand{font-size:25px;font-weight:650;letter-spacing:-.6px;color:var(--text)}
+.sub{font-size:11px;color:var(--muted);letter-spacing:.3px}.header-spacer{flex:1}
+.header-btn,.icon,.tool,.size-preset,.shape-choice,.shape-panel-close,.size-actions button,.text-style-btn{border:1px solid var(--line);background:var(--glass-soft);backdrop-filter:blur(16px) saturate(135%);-webkit-backdrop-filter:blur(16px) saturate(135%);box-shadow:0 2px 8px rgba(80,96,135,.05),inset 0 1px 0 rgba(255,255,255,.58);transition:.16s ease}
+.header-btn{border-radius:14px;padding:8px 14px;cursor:pointer;font-size:12px;color:var(--muted);white-space:nowrap}.header-btn:hover,.icon:hover,.tool:hover,.size-preset:hover,.shape-choice:hover,.shape-panel-close:hover,.text-style-btn:hover{background:var(--glass-strong);transform:translateY(-1px)}
+.header-btn:last-child{background:linear-gradient(135deg,#7183ff,#8b74f7);color:#fff;border-color:rgba(255,255,255,.55);box-shadow:0 10px 22px rgba(113,126,242,.22),inset 0 1px 0 rgba(255,255,255,.35)}
+.theme-toggle{min-width:42px;padding:8px 10px}
+.main{flex:1;min-height:0;display:flex;border-left:1px solid var(--glass-border);border-right:1px solid var(--glass-border);overflow:hidden;background:rgba(255,255,255,.18)}
+.tools{width:142px;flex:none;padding:18px 16px;display:flex;flex-direction:column;align-items:stretch;gap:8px;background:rgba(246,249,255,.5);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);border-right:1px solid var(--line);overflow:auto}
+.tool{width:44px;height:44px;border-radius:14px;color:#8093b2;display:grid;place-items:center;padding:0;gap:0;cursor:pointer;white-space:nowrap;flex:none}.tool span{font-size:18px;line-height:1;color:currentColor}.tool:after{display:none}.tool.active{background:rgba(126,143,255,.14);border-color:rgba(116,134,255,.5);color:#5f76f0;box-shadow:0 8px 20px rgba(100,118,223,.12),inset 0 1px 0 rgba(255,255,255,.66)}.tool.active span{color:#5f76f0}.sep{width:28px;height:1px;background:var(--line);margin:5px auto}.color-adjust{gap:5px}.micro-range{width:74px}.shape-selection-controls{gap:5px;padding:3px 5px;border:1px solid var(--line);background:var(--glass-soft);border-radius:12px}.shape-selection-controls[hidden]{display:none}.shape-selection-controls input{width:58px;height:28px;padding:0 6px;border:1px solid var(--line);background:var(--input-bg);border-radius:8px;outline:none;font-size:10px}.shape-angle-unit{font-size:10px;color:#8395ae}
+.center{min-width:0;flex:1;display:flex;flex-direction:column;background:rgba(255,255,255,.24)}
+.bar{min-height:64px;display:flex;align-items:center;gap:9px;padding:10px 14px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.34);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);overflow-x:auto;overflow-y:hidden;scrollbar-width:none}.bar::-webkit-scrollbar{display:none}
+.bar-group{display:flex;align-items:center;gap:7px;flex:none}.bar label{font-size:11px;color:#7d90ad}.bar select,.bar input[type="number"]{height:34px;padding:0 9px;border-radius:11px;border:1px solid var(--line);background:var(--input-bg);outline:none;min-width:0}.bar select{font-size:11px}.bar input[type="number"]{width:70px;font-size:11px}.icon{width:34px;height:34px;border-radius:12px;display:grid;place-items:center;cursor:pointer;color:#7388a9}.icon.danger{color:var(--danger)}.color{width:34px;height:34px;border-radius:12px;padding:3px;border:1px solid var(--line);background:var(--glass-soft);box-shadow:inset 0 1px 0 rgba(255,255,255,.6)}.range{width:100px}.val{font-size:11px;color:#8294af;min-width:32px}.spacer{flex:1;min-width:8px}.toggle{display:flex;align-items:center;gap:7px;font-size:11px;color:#7b8ea9;cursor:pointer;white-space:nowrap}.toggle input{display:none}.switch{width:34px;height:19px;background:#c6cfdf;border-radius:999px;position:relative;box-shadow:inset 0 1px 2px rgba(60,75,100,.08)}.switch:after{content:"";position:absolute;top:3px;left:3px;width:13px;height:13px;background:#fff;border-radius:50%;transition:.16s;box-shadow:0 2px 4px rgba(40,52,78,.16)}.toggle input:checked+.switch{background:#7890ff}.toggle input:checked+.switch:after{left:18px}.zoom{width:84px}
+.canvas-area{flex:1;min-height:0;overflow:auto;display:flex;align-items:center;justify-content:center;padding:28px;background:radial-gradient(550px 330px at 50% 52%,rgba(255,255,255,.56),transparent 68%),linear-gradient(145deg,rgba(226,233,255,.76),rgba(244,238,255,.72));scrollbar-color:rgba(116,132,173,.35) transparent}
+.stage-wrap{position:relative;flex:none;padding:18px}.canvas-stage{position:relative;width:1100px;height:720px;overflow:hidden;background-color:var(--paper);background-image:linear-gradient(45deg,var(--checker) 25%,transparent 25%),linear-gradient(-45deg,var(--checker) 25%,transparent 25%),linear-gradient(45deg,transparent 75%,var(--checker) 75%),linear-gradient(-45deg,transparent 75%,var(--checker) 75%);background-size:20px 20px;background-position:0 0,0 10px,10px -10px,-10px 0;border-radius:22px;border:1px solid rgba(255,255,255,.96);box-shadow:0 24px 55px rgba(69,84,126,.17),0 4px 14px rgba(60,72,108,.08)}
+.draw-layer{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}.draw-layer.hidden-layer{display:none}#interaction{pointer-events:auto;cursor:none;touch-action:none}
+.brush-cursor{position:absolute;z-index:80;pointer-events:none;border:1.5px solid var(--accent);border-radius:50%;transform:translate(-50%,-50%);display:none;box-shadow:0 0 0 2px rgba(255,255,255,.28),0 4px 12px rgba(64,78,120,.14)}
+.brush-cursor.eraser-cursor{border:2px solid #7f8ba4;border-radius:8px;transform:translate(-50%,-50%) rotate(-18deg);background:linear-gradient(135deg,rgba(255,255,255,.35),rgba(127,139,164,.12));box-shadow:0 0 0 2px rgba(255,255,255,.35),0 4px 12px rgba(75,88,120,.18)}
+.bottom{height:44px;display:flex;align-items:center;padding:0 18px;gap:10px;border:1px solid var(--glass-border);background:var(--glass);backdrop-filter:blur(25px);-webkit-backdrop-filter:blur(25px);border-radius:0 0 28px 28px;box-shadow:0 -4px 20px rgba(75,90,130,.05);flex:none}.status{font-size:11px;color:#7488a8;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.hint{font-size:10px;color:#98a6bb}
+.size-panel,.shape-panel{position:fixed;z-index:90;overflow:auto;background:rgba(249,252,255,.82);backdrop-filter:blur(24px) saturate(150%);-webkit-backdrop-filter:blur(24px) saturate(150%);border:1px solid rgba(255,255,255,.9);border-radius:20px;box-shadow:0 26px 70px rgba(47,60,100,.18),0 3px 14px rgba(40,55,90,.08);color:#58708f}.size-panel{top:92px;right:34px;width:370px;max-width:calc(100vw - 24px);max-height:calc(100vh - 126px);padding:16px}.shape-panel{left:164px;top:94px;width:360px;max-width:calc(100vw - 24px);max-height:calc(100vh - 120px);padding:14px}.size-panel[hidden],.shape-panel[hidden]{display:none}.size-panel h2,.shape-panel h2{font-size:14px;color:#456183;margin:0 0 6px}.size-intro,.shape-help{display:block;color:#8ea0b6;font-size:10px;margin-bottom:12px}.size-preset-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}.size-preset{min-width:0;padding:8px 3px 7px;border-radius:11px;color:#8396b0;cursor:pointer}.size-preset:hover,.size-preset.selected{border-color:rgba(114,133,255,.55);background:rgba(119,141,255,.1);color:#5872ef}.preset-shape{display:block;width:38px;height:26px;margin:0 auto 5px;border:1px solid currentColor;border-radius:5px;background:rgba(120,140,255,.09)}.preset-shape.circle{width:26px;border-radius:50%}.preset-shape.oval{border-radius:50%}.preset-shape.tall{width:22px;height:32px}.preset-shape.wide{width:42px;height:20px}.preset-shape.pill{height:17px;border-radius:999px}.preset-label{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:9px;text-align:center}.size-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.size-fields label{display:flex;flex-direction:column;gap:5px;font-size:11px;color:#7d91ac}.size-fields input{width:100%;padding:8px 9px;border:1px solid var(--line);border-radius:10px;background:var(--glass-soft);outline:none}.size-actions{display:flex;gap:8px;margin-top:12px}.size-actions button{flex:1;padding:8px;border-radius:10px;cursor:pointer;font-size:12px}.size-actions button.primary{background:linear-gradient(135deg,#7386ff,#8c76f7);border-color:rgba(255,255,255,.64);color:white}.size-note{display:block;margin-top:9px;color:#9aa9bb;font-size:10px;line-height:1.4}.advanced-size{margin-top:12px;color:#8194ad;font-size:10px}.shape-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}.shape-choice{min-height:52px;padding:5px 2px;border-radius:11px;color:#8396b0;cursor:pointer}.shape-choice:hover,.shape-choice.selected{border-color:rgba(114,133,255,.55);background:rgba(119,141,255,.1);color:#5872ef}.shape-glyph{display:block;height:27px;font-size:22px;line-height:25px;text-align:center;color:currentColor}.shape-label{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:9px;text-align:center}.shape-options{display:flex;align-items:center;gap:8px;margin-top:10px;color:#7d91ac;font-size:11px}.shape-edit-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-top:12px;padding-top:10px;border-top:1px solid var(--line)}.shape-edit-grid[hidden]{display:none}.shape-edit-grid label{font-size:10px;color:#7d91ac}.shape-edit-grid input{width:100%;margin-top:5px;height:32px;border:1px solid var(--line);border-radius:9px;background:var(--input-bg);padding:0 8px;outline:none}.selection-handle{position:absolute;width:8px;height:8px;border-radius:50%;background:#fff;border:2px solid #7180ff;box-shadow:0 2px 6px rgba(65,80,150,.18)}.save-panel{position:fixed;z-index:120;top:92px;right:34px;width:360px;max-width:calc(100vw - 24px);padding:16px;background:rgba(249,252,255,.88);backdrop-filter:blur(26px) saturate(155%);-webkit-backdrop-filter:blur(26px) saturate(155%);border:1px solid rgba(255,255,255,.92);border-radius:20px;box-shadow:0 26px 70px rgba(47,60,100,.2),inset 0 1px 0 rgba(255,255,255,.86);color:#56708f}.save-panel[hidden]{display:none}.save-panel-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.save-panel-head strong{display:block;font-size:15px;color:#456183}.save-panel-head span{display:block;font-size:10px;color:#91a1b7;margin-top:3px}.save-close{width:30px;height:30px;border:1px solid var(--line);background:var(--glass-soft);border-radius:10px;cursor:pointer}.save-options{display:grid;gap:7px}.save-option{padding:11px;text-align:left;border:1px solid var(--line);background:var(--glass-soft);border-radius:12px;cursor:pointer}.save-option b{display:block;font-size:11px;color:#52709a}.save-option span{display:block;font-size:9px;color:#92a1b5;margin-top:3px}.save-option.active{border-color:rgba(113,131,255,.55);background:rgba(119,141,255,.11)}.save-primary{width:100%;margin-top:11px;padding:10px;border:1px solid transparent;border-radius:12px;background:linear-gradient(135deg,#7386ff,#8c76f7);color:#fff;cursor:pointer;box-shadow:0 10px 20px rgba(113,126,242,.18)}.shape-panel-close{width:100%;margin-top:10px;padding:7px;border-radius:10px;color:#7890ac;cursor:pointer;font-size:11px}.shape-choice[data-shape="octagon"]{color:#d979af;border-color:rgba(217,121,175,.48)}
+.inline-text-editor{position:absolute;z-index:100;min-width:210px;max-width:min(360px,calc(100% - 12px));padding:8px;border-radius:16px;border:1px solid rgba(255,255,255,.9);background:rgba(250,252,255,.88);backdrop-filter:blur(20px) saturate(150%);-webkit-backdrop-filter:blur(20px);box-shadow:0 20px 48px rgba(45,61,102,.2),inset 0 1px 0 rgba(255,255,255,.85)}
+.inline-text-editor textarea{display:block;width:100%;min-height:44px;resize:both;padding:9px 10px;border:1px solid rgba(119,141,255,.28);border-radius:11px;background:rgba(255,255,255,.78);outline:none;color:#243b62;line-height:1.3}.inline-text-editor textarea:focus{border-color:rgba(113,131,255,.65);box-shadow:0 0 0 3px rgba(113,131,255,.1)}
+.text-editor-actions{display:flex;gap:6px;justify-content:flex-end;margin-top:7px}.text-editor-actions button{border:1px solid var(--line);background:var(--glass-soft);border-radius:9px;padding:6px 10px;font-size:11px;cursor:pointer}.text-editor-actions .commit{background:linear-gradient(135deg,#7386ff,#8c76f7);color:white;border-color:transparent}
 .hidden-ui{position:fixed;left:-10000px;top:-10000px;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none}
-@media(max-width:850px){.sub{display:none}.bar{overflow:auto}.tools{width:46px}.canvas-area{padding:10px}.hint{display:none}}
+@media(max-width:850px){
+ .app{padding:8px;}.app:before{inset:4px;border-radius:24px}.header{height:60px;border-radius:20px 20px 0 0;padding:0 8px 0 12px;gap:8px}.logo{margin-left:0;width:42px;height:42px;border-radius:13px}.brand{font-size:19px}.sub{display:none}.header-btn{padding:7px 9px}.header-btn:nth-of-type(1){display:none}.main{flex-direction:column}.tools{width:100%;height:56px;min-height:56px;padding:7px 9px;flex-direction:row;align-items:center;gap:7px;border-right:0;border-bottom:1px solid var(--line);overflow-x:auto;overflow-y:hidden}.tool{height:40px;width:auto;min-width:42px;padding:0 11px;justify-content:center}.tool:after{display:none}.tool span{font-size:18px}.sep{width:1px;height:28px;margin:0 2px}.bar{min-height:58px;padding:7px 9px}.bar-group{gap:5px}.bar label{font-size:10px}.range{width:80px}.zoom{width:72px}.text-controls.visible{display:flex}.canvas-area{padding:10px;align-items:flex-start;justify-content:flex-start}.stage-wrap{padding:8px;margin:auto}.bottom{height:34px;border-radius:0 0 20px 20px;padding:0 9px}.hint{display:none}.size-panel{top:74px;right:10px;left:10px;width:auto;max-height:calc(100dvh - 90px);border-radius:18px}.shape-panel{top:124px;left:10px;right:10px;width:auto;max-width:none;max-height:calc(100dvh - 140px);border-radius:18px}.save-panel{top:74px;left:10px;right:10px;width:auto;max-width:none;border-radius:18px}.shape-edit-grid{grid-template-columns:1fr 1fr 1fr}.size-preset-grid{grid-template-columns:repeat(4,1fr)}.shape-grid{grid-template-columns:repeat(4,1fr)}
+}
+@media(max-width:480px){.brand{font-size:18px}.theme-toggle{display:none}.header-btn{font-size:11px}.size-preset-grid,.shape-grid{grid-template-columns:repeat(3,1fr)}.bar-group label{display:none}.color{width:32px;height:32px}.icon{width:32px;height:32px}.inline-text-editor{min-width:180px}.inline-text-editor textarea{font-size:16px}}
+body.dark .tools{background:rgba(22,31,53,.48)}
+body.dark .bar{background:rgba(25,34,55,.42)}
+body.dark .canvas-area{background:linear-gradient(145deg,rgba(44,53,91,.82),rgba(52,42,83,.72))}
+body.dark .size-panel,body.dark .shape-panel,body.dark .inline-text-editor{background:rgba(31,42,68,.9);color:#e8efff}
+body.dark .inline-text-editor textarea{background:rgba(10,18,36,.5);color:#f1f5ff;border-color:rgba(145,160,255,.32)}
 </style></head><body><div class="app">
   <header class="header">
-    <div class="logo" aria-label="SnapInk logo"><svg viewBox="0 0 32 32" role="img" aria-hidden="true"><defs><linearGradient id="inkMark" x1="7" y1="26" x2="25" y2="6" gradientUnits="userSpaceOnUse"><stop stop-color="#ffffff"/><stop offset="1" stop-color="#e8edff"/></linearGradient></defs><path d="M8.1 22.8 9.6 27l4.2-1.5L25.1 14.2l-4.9-4.9L8.1 22.8Z" fill="url(#inkMark)"/><path d="m18.8 8.2 2-2a1.8 1.8 0 0 1 2.5 0l2.5 2.5a1.8 1.8 0 0 1 0 2.5l-2 2-5-5Z" fill="#fff" opacity=".96"/><path d="m8.1 22.8 1.5 4.2 4.2-1.5" fill="#cfd8ff"/><path d="M25.7 4.1v3.1M24.1 5.7h3.2" stroke="#fff" stroke-width="1.4" stroke-linecap="round" opacity=".9"/></svg></div><div class="brand">SnapInk</div><div class="sub">かんたんに描く</div>
+    <div class="logo" aria-label="SnapInk logo"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjggMTI4Ij4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iZyIgeDE9IjE0IiB5MT0iMTAiIHgyPSIxMTYiIHkyPSIxMTgiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KICAgICAgPHN0b3Agc3RvcC1jb2xvcj0iIzZGODZGRiIvPjxzdG9wIG9mZnNldD0iLjUyIiBzdG9wLWNvbG9yPSIjQTU4QkZGIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjRkY5QkM4Ii8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJnMiIgeDE9IjM2IiB5MT0iMjIiIHgyPSI5NSIgeTI9Ijk4IiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CiAgICAgIDxzdG9wIHN0b3AtY29sb3I9IiNGRkZGRkYiIHN0b3Atb3BhY2l0eT0iLjk1Ii8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjRjJGNUZGIiBzdG9wLW9wYWNpdHk9Ii43OCIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICAgIDxmaWx0ZXIgaWQ9InNoYWRvdyIgeD0iLTMwJSIgeT0iLTMwJSIgd2lkdGg9IjE2MCUiIGhlaWdodD0iMTYwJSI+CiAgICAgIDxmZURyb3BTaGFkb3cgZHg9IjAiIGR5PSI4IiBzdGREZXZpYXRpb249IjgiIGZsb29kLWNvbG9yPSIjNDY1NkE1IiBmbG9vZC1vcGFjaXR5PSIuMjIiLz4KICAgIDwvZmlsdGVyPgogIDwvZGVmcz4KICA8cmVjdCB4PSI2IiB5PSI2IiB3aWR0aD0iMTE2IiBoZWlnaHQ9IjExNiIgcng9IjMzIiBmaWxsPSJ1cmwoI2cpIiBmaWx0ZXI9InVybCgjc2hhZG93KSIvPgogIDxyZWN0IHg9IjkiIHk9IjkiIHdpZHRoPSIxMTAiIGhlaWdodD0iMTEwIiByeD0iMzAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI0ZGRkZGRiIgc3Ryb2tlLW9wYWNpdHk9Ii4zNCIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgPHBhdGggZD0iTTM2IDgzYzE4IDEwIDQ2IDMgNTQtMTQgNy0xNC00LTI1LTE4LTIxLTExIDMtMTgtMS0xNy05IDItMTAgMTQtMTcgMzEtMTYiIGZpbGw9Im5vbmUiIHN0cm9rZT0idXJsKCNnMikiIHN0cm9rZS13aWR0aD0iMTEiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogIDxwYXRoIGQ9Ik0zOCA4MGMxMiA2IDMwIDQgNDAtMyIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRkZGRkZGIiBzdHJva2Utb3BhY2l0eT0iLjcyIiBzdHJva2Utd2lkdGg9IjIuNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+Cjwvc3ZnPgo=" alt="SnapInk"></div><div class="brand">SnapInk</div><div class="sub">かんたんに、自由に描く</div>
     <div class="header-spacer"></div>
-    <button class="header-btn" id="refLoadBtn">画像</button>
+    <button class="header-btn theme-toggle" id="themeToggle" title="ライト / ダーク">☼</button>
     <button class="header-btn" id="sizeBtn" aria-expanded="false">サイズ</button>
     <button class="header-btn" id="saveBtn">保存</button>
   </header>
@@ -49,22 +82,39 @@ button,input{font:inherit;color:inherit}.app{height:100vh;display:flex;flex-dire
     <div class="shape-grid" id="shapeGrid"></div>
     <label class="shape-options"><input id="shapeFillToggle" type="checkbox"> 内側を塗りつぶす</label>
     <label class="shape-options"><input id="shapeOutlineToggle" type="checkbox" checked> 枠線を表示</label>
+    <div class="shape-edit-grid" id="shapeEditGrid" hidden>
+      <label>幅 <input id="shapeWidthInput" type="number" min="4" max="4096" step="1"></label>
+      <label>高さ <input id="shapeHeightInput" type="number" min="4" max="4096" step="1"></label>
+      <label>角度 <input id="shapeRotationInput" type="number" min="-180" max="180" step="1" value="0">°</label>
+    </div>
     <button type="button" class="shape-panel-close" id="shapePanelClose">閉じる</button>
+  </section>
+  <section class="save-panel" id="savePanel" hidden aria-label="保存範囲を設定">
+    <div class="save-panel-head"><div><strong>保存</strong><span>保存する領域を選べます。</span></div><button type="button" class="save-close" id="savePanelClose">×</button></div>
+    <div class="save-options">
+      <button type="button" class="save-option" data-save-mode="full"><b>キャンバス全体</b><span>現在のサイズそのまま</span></button>
+      <button type="button" class="save-option" data-save-mode="selection"><b>現在の選択範囲</b><span>範囲選択している場合</span></button>
+      <button type="button" class="save-option" data-save-mode="custom"><b>範囲を選んで保存</b><span>キャンバス上でドラッグ</span></button>
+    </div>
+    <button class="save-primary" id="saveDownloadBtn" type="button">PNGで保存</button>
   </section>
   <div class="main">
     <aside class="tools" id="toolDock">
-      <button type="button" class="tool tool-icon-btn active" data-tool="pen" title="ペン"><span>✎</span></button>
-      <button type="button" class="tool tool-icon-btn" data-tool="eraser" title="消しゴム"><span>⌫</span></button>
+      <button type="button" class="tool tool-icon-btn active" data-tool="pen" title="鉛筆"><span>✎</span></button>
+      <button type="button" class="tool tool-icon-btn" data-tool="eraser" title="消しゴム"><span>▱</span></button>
       <button type="button" class="tool tool-icon-btn" data-tool="eyedropper" title="スポイト"><span>⌕</span></button>
       <button type="button" class="tool tool-icon-btn" data-tool="fill" title="塗りつぶし"><span>◒</span></button>
       <button type="button" class="tool tool-icon-btn" data-tool="shape" title="図形を追加"><span>◇</span></button>
       <div class="sep"></div>
       <button type="button" class="tool tool-icon-btn" data-tool="select" title="ポインターで選択"><span>➤</span></button>
-      <button type="button" class="tool tool-icon-btn" data-tool="text" title="文字"><span>T</span></button>
     </aside>
     <section class="center">
       <div class="bar">
         <div class="bar-group"><input class="color" type="color" id="colorInput" value="#1a1a1a" title="色"><span class="val" id="colorHexLabel">#1a1a1a</span></div>
+        <div class="bar-group color-adjust" title="色の鮮明さと明暗"><label for="saturationInput">鮮明</label><input class="micro-range" id="saturationInput" type="range" min="0" max="100" value="100"><span class="val" id="saturationValue">100</span></div>
+        <div class="bar-group color-adjust" title="色の明るさ"><label for="lightnessInput">明暗</label><input class="micro-range" id="lightnessInput" type="range" min="10" max="95" value="50"><span class="val" id="lightnessValue">50</span></div>
+        <div class="bar-group brush-style-group" id="brushStyleGroup"><label for="brushStyleInput">筆</label><select id="brushStyleInput" title="鉛筆 / ブラシ"><option value="pencil">鉛筆</option><option value="brush">ブラシ</option></select></div>
+        <div class="bar-group shape-selection-controls" id="shapeSelectionControls" hidden><label>図形</label><input id="shapeXInput" type="number" title="X"><input id="shapeYInput" type="number" title="Y"><input id="shapeWidthInput" type="number" min="4" max="4096" title="幅"><input id="shapeHeightInput" type="number" min="4" max="4096" title="高さ"><input id="shapeRotationInput" type="number" min="-180" max="180" title="角度"><span class="shape-angle-unit">°</span></div>
         <div class="bar-group"><label for="widthInput">太さ</label><input class="range" id="widthInput" type="range" min="1" max="60" value="4"><span class="val" id="widthValueLabel">4px</span></div>
         <div class="bar-group"><label class="toggle"><input type="checkbox" id="smoothToggleQuick" checked><span class="switch"></span>なめらか</label></div>
         <button class="icon" id="undoBtn" disabled title="元に戻す">↶</button><button class="icon" id="redoBtn" disabled title="やり直す">↷</button>
@@ -72,17 +122,15 @@ button,input{font:inherit;color:inherit}.app{height:100vh;display:flex;flex-dire
         <div class="spacer"></div><label for="zoomInput">ズーム</label><input class="zoom" id="zoomInput" type="range" min="50" max="200" value="100"><span class="val" id="zoomValue">100%</span>
       </div>
       <main class="canvas-area" id="canvasArea"><div class="stage-wrap" id="stageWrap"><div class="canvas-stage" id="canvasStage">
-        <canvas id="layer-base" class="draw-layer"></canvas><canvas id="layer-line" class="draw-layer"></canvas><canvas id="interaction" class="draw-layer"></canvas><div class="brush-cursor" id="brushCursor"></div>
+        <canvas id="layer-base" class="draw-layer"></canvas><canvas id="layer-line" class="draw-layer"></canvas><canvas id="layer-shapes" class="draw-layer"></canvas><canvas id="interaction" class="draw-layer"></canvas><div class="brush-cursor" id="brushCursor"></div>
       </div></div></main>
     </section>
   </div>
   <footer class="bottom"><div class="status" id="statusBar">ペン ・ 1100×720px</div><div class="hint">P ペン　E 消しゴム　Ctrl+Z 元に戻す　Delete 選択範囲を消去</div></footer>
 
   <div class="hidden-ui">
-    <input type="file" id="refInput" accept="image/*"><img id="refImage"><div id="refPlaceholder"></div><span id="refFileName"></span><button id="refClearBtn"></button>
     <label class="switch"><input type="checkbox" id="smoothToggle" checked></label><div id="strengthBlock"><input type="range" id="strengthInput" min="0" max="100" value="40"><span id="strengthValueLabel">40</span></div><div id="smoothStatus"></div>
     <div class="panel-section"><button id="clearSelectionBtn"></button></div>
-    <label for="dummyWidth">dummy</label><input id="dummyWidth" type="range">
   </div>
 </div>
 <script>
@@ -96,7 +144,7 @@ button,input{font:inherit;color:inherit}.app{height:100vh;display:flex;flex-dire
   let CANVAS_H = 720;
   const UNDO_LIMIT = 20;
 
-  const TOOL_NAMES = { pen:"ペン", eraser:"消しゴム", eyedropper:"スポイト", fill:"塗りつぶし", shape:"図形", select:"範囲選択", text:"テキスト" };
+  const TOOL_NAMES = { pen:"鉛筆", eraser:"消しゴム", eyedropper:"スポイト", fill:"塗りつぶし", shape:"図形", select:"ポインター" };
   const LAYER_NAMES = { line:"線画", base:"下塗り" };
 
   const state = {
@@ -106,6 +154,9 @@ button,input{font:inherit;color:inherit}.app{height:100vh;display:flex;flex-dire
     shapeOutline: true,
     color: "#1a1a1a",
     lineWidth: 4,
+    brushStyle: "pencil",
+    colorHsl: {h:0,s:0,l:10},
+    textStyle: { fontFamily:"-apple-system,BlinkMacSystemFont,\"SF Pro Text\",\"Hiragino Kaku Gothic ProN\",\"Yu Gothic\",Meiryo,sans-serif", fontSize:40, fontWeight:400, italic:false, underline:false, align:"left" },
     activeLayer: "line",
     layers: {
       base:{ visible:true },
@@ -124,7 +175,10 @@ button,input{font:inherit;color:inherit}.app{height:100vh;display:flex;flex-dire
     shaping:false,
     shapeStart:null,
     shapeObjects:[],
-    selectedShape:null
+    selectedShape:null,
+    saveMode:"full",
+    shapeTransforming:null,
+    shapeTransformStart:null
   };
 
   /* =========================================================
@@ -133,16 +187,32 @@ button,input{font:inherit;color:inherit}.app{height:100vh;display:flex;flex-dire
   const stageEl = document.getElementById("canvasStage");
   const canvasBase = document.getElementById("layer-base");
   const canvasLine = document.getElementById("layer-line");
+  const canvasShapes = document.getElementById("layer-shapes");
   const interaction = document.getElementById("interaction");
-  const canvases = { base:canvasBase, line:canvasLine };
+  const canvases = { base:canvasBase, line:canvasLine, shapes:canvasShapes };
 
   const ctxBase = canvasBase.getContext("2d");
   const ctxLine = canvasLine.getContext("2d");
+  const ctxShapes = canvasShapes.getContext("2d");
   const ctxInteraction = interaction.getContext("2d");
 
   const brushCursorEl = document.getElementById("brushCursor");
 
   const colorInput = document.getElementById("colorInput");
+  const brushStyleGroup = document.getElementById("brushStyleGroup");
+  const brushStyleInput = document.getElementById("brushStyleInput");
+  const saturationInput = document.getElementById("saturationInput");
+  const lightnessInput = document.getElementById("lightnessInput");
+  const saturationValue = document.getElementById("saturationValue");
+  const lightnessValue = document.getElementById("lightnessValue");
+  const shapeSelectionControls = document.getElementById("shapeSelectionControls");
+  const shapeXInput = document.getElementById("shapeXInput");
+  const shapeYInput = document.getElementById("shapeYInput");
+  const shapeWidthInput = document.getElementById("shapeWidthInput");
+  const shapeHeightInput = document.getElementById("shapeHeightInput");
+  const shapeRotationInput = document.getElementById("shapeRotationInput");
+
+  const themeToggle = document.getElementById("themeToggle");
   const colorHexLabel = document.getElementById("colorHexLabel");
   const widthInput = document.getElementById("widthInput");
   const widthValueLabel = document.getElementById("widthValueLabel");
@@ -160,6 +230,10 @@ button,input{font:inherit;color:inherit}.app{height:100vh;display:flex;flex-dire
   const shapeFillToggle = document.getElementById("shapeFillToggle");
   const shapeOutlineToggle = document.getElementById("shapeOutlineToggle");
   const shapePanelClose = document.getElementById("shapePanelClose");
+  const shapeEditGrid = document.getElementById("shapeEditGrid");
+  const savePanel = document.getElementById("savePanel");
+  const savePanelClose = document.getElementById("savePanelClose");
+  const saveDownloadBtn = document.getElementById("saveDownloadBtn");
 
   const colorOptGroup = document.getElementById("colorOptGroup");
   const widthOptGroup = document.getElementById("widthOptGroup");
@@ -173,12 +247,6 @@ button,input{font:inherit;color:inherit}.app{height:100vh;display:flex;flex-dire
   const saveBtn = document.getElementById("saveBtn");
   const statusBarEl = document.getElementById("statusBar");
 
-  const refInput = document.getElementById("refInput");
-  const refLoadBtn = document.getElementById("refLoadBtn");
-  const refImage = document.getElementById("refImage");
-  const refPlaceholder = document.getElementById("refPlaceholder");
-  const refFileName = document.getElementById("refFileName");
-  const refClearBtn = document.getElementById("refClearBtn");
 
   const smoothToggle = document.getElementById("smoothToggle");
   const smoothToggleQuick = document.getElementById("smoothToggleQuick");
@@ -195,11 +263,12 @@ button,input{font:inherit;color:inherit}.app{height:100vh;display:flex;flex-dire
      初期化
   ========================================================= */
   function init(){
-    [canvasBase, canvasLine, interaction].forEach(function(c){
+    [canvasBase, canvasLine, canvasShapes, interaction].forEach(function(c){
       c.width = CANVAS_W;
       c.height = CANVAS_H;
     });
     selectTool("pen");
+    setColor(state.color);
     highlightActiveSwatch();
     updateUndoRedoButtons();
     updateSelectionButtons();
@@ -238,37 +307,46 @@ button,input{font:inherit;color:inherit}.app{height:100vh;display:flex;flex-dire
      描画スタイル適用
   ========================================================= */
   function applyStrokeStyle(ctx){
-    ctx.lineCap = "round";
+    ctx.lineCap = state.brushStyle === "pencil" ? "round" : "round";
     ctx.lineJoin = "round";
     ctx.lineWidth = state.lineWidth;
     if (state.tool === "eraser"){
       ctx.globalCompositeOperation = "destination-out";
+      ctx.globalAlpha = 1;
       ctx.strokeStyle = "rgba(0,0,0,1)";
       ctx.fillStyle = "rgba(0,0,0,1)";
     } else {
       ctx.globalCompositeOperation = "source-over";
+      ctx.globalAlpha = state.brushStyle === "pencil" ? 0.78 : 1;
       ctx.strokeStyle = state.color;
       ctx.fillStyle = state.color;
     }
   }
 
   function previewStyle(ctx){
-    ctx.lineCap = "round";
+    ctx.lineCap = state.brushStyle === "pencil" ? "round" : "round";
     ctx.lineJoin = "round";
-    ctx.lineWidth = state.lineWidth;
+    ctx.lineWidth = state.lineWidth * (state.brushStyle === "pencil" ? 0.78 : 1.08);
     ctx.globalCompositeOperation = "source-over";
-    ctx.strokeStyle = (state.tool === "eraser") ? "rgba(140,140,140,0.55)" : state.color;
+    ctx.globalAlpha = state.tool === "eraser" ? 0.55 : (state.brushStyle === "pencil" ? 0.78 : 1);
+    ctx.strokeStyle = (state.tool === "eraser") ? "rgba(120,130,150,1)" : state.color;
   }
 
   /* =========================================================
      Undo / Redo（統合履歴）
   ========================================================= */
+  function cloneShapeObjects(){
+    return state.shapeObjects.map(function(item){
+      return {rect:{x:item.rect.x,y:item.rect.y,w:item.rect.w,h:item.rect.h},type:item.type,fill:item.fill,outline:item.outline,layer:item.layer,style:Object.assign({},item.style||{}),rotation:item.rotation||0};
+    });
+  }
   function snapshotLayers(layerKeys){
     const snap = {};
     layerKeys.forEach(function(key){
-      const ctx = key === "base" ? ctxBase : ctxLine;
+      const ctx = key === "base" ? ctxBase : (key === "shapes" ? ctxShapes : ctxLine);
       snap[key] = ctx.getImageData(0, 0, CANVAS_W, CANVAS_H);
     });
+    if (layerKeys.indexOf("shapes") !== -1) snap.shapeObjects = cloneShapeObjects();
     return snap;
   }
 
@@ -282,24 +360,26 @@ button,input{font:inherit;color:inherit}.app{height:100vh;display:flex;flex-dire
   function undo(){
     if (!undoStack.length) return;
     const snap = undoStack.pop();
-    const keys = Object.keys(snap);
+    const keys = Object.keys(snap).filter(function(key){ return key !== "shapeObjects"; });
     redoStack.push(snapshotLayers(keys));
     keys.forEach(function(key){
-      const ctx = key === "base" ? ctxBase : ctxLine;
+      const ctx = key === "base" ? ctxBase : (key === "shapes" ? ctxShapes : ctxLine);
       ctx.putImageData(snap[key], 0, 0);
     });
+    if (snap.shapeObjects) { state.shapeObjects = snap.shapeObjects; redrawShapeLayer(); }
     updateUndoRedoButtons();
   }
 
   function redo(){
     if (!redoStack.length) return;
     const snap = redoStack.pop();
-    const keys = Object.keys(snap);
+    const keys = Object.keys(snap).filter(function(key){ return key !== "shapeObjects"; });
     undoStack.push(snapshotLayers(keys));
     keys.forEach(function(key){
-      const ctx = key === "base" ? ctxBase : ctxLine;
+      const ctx = key === "base" ? ctxBase : (key === "shapes" ? ctxShapes : ctxLine);
       ctx.putImageData(snap[key], 0, 0);
     });
+    if (snap.shapeObjects) { state.shapeObjects = snap.shapeObjects; redrawShapeLayer(); }
     updateUndoRedoButtons();
   }
 
@@ -445,6 +525,7 @@ button,input{font:inherit;color:inherit}.app{height:100vh;display:flex;flex-dire
     }
     ctx.stroke();
     ctx.globalCompositeOperation = "source-over";
+    ctx.globalAlpha = 1;
 
     updateSmoothStatus(rawPoints.length, pathPoints.length, smoothed);
   }
@@ -466,6 +547,7 @@ button,input{font:inherit;color:inherit}.app{height:100vh;display:flex;flex-dire
     mctx.fillRect(0, 0, CANVAS_W, CANVAS_H);
     if (state.layers.base.visible) mctx.drawImage(canvasBase, 0, 0);
     if (state.layers.line.visible) mctx.drawImage(canvasLine, 0, 0);
+    mctx.drawImage(canvasShapes, 0, 0);
     const px = clamp(Math.round(x), 0, CANVAS_W - 1);
     const py = clamp(Math.round(y), 0, CANVAS_H - 1);
     const data = mctx.getImageData(px, py, 1, 1).data;
@@ -523,23 +605,73 @@ button,input{font:inherit;color:inherit}.app{height:100vh;display:flex;flex-dire
   /* =========================================================
      テキストツール
   ========================================================= */
-  function getTextFontSize(){
-    return Math.max(Math.round(state.lineWidth * 4), 12);
+  function getTextFontSize(){ return clamp(Number(state.textStyle.fontSize) || 40, 8, 300); }
+
+  function getTextFontCss(){
+    const weight = state.textStyle.fontWeight >= 700 ? "700" : "400";
+    const italic = state.textStyle.italic ? "italic " : "normal ";
+    return italic + weight + " " + getTextFontSize() + "px " + state.textStyle.fontFamily;
   }
 
   function placeTextAt(p){
-    const old = document.getElementById('inlineTextEditor');
-    if(old) old.remove();
-    const wrap = document.createElement('div');
-    wrap.id = 'inlineTextEditor';
-    wrap.style.cssText = 'position:absolute;z-index:60;left:'+(p.x/CANVAS_W*100)+'%;top:'+(p.y/CANVAS_H*100)+'%;transform:translate(-2px,-2px);';
-    const input=document.createElement('input');
-    input.type='text'; input.placeholder='文字を入力…'; input.autocomplete='off';
-    input.style.cssText='width:220px;padding:8px 10px;border:1px solid var(--ink-teal);border-radius:8px;background:white;color:#111;box-shadow:0 6px 18px rgba(0,0,0,.18);font:16px var(--font-ui);';
-    wrap.appendChild(input); stageEl.appendChild(wrap); input.focus();
-    const commit=()=>{ const text=input.value.trim(); wrap.remove(); if(!text) return; const layer=state.activeLayer; pushUndo([layer]); const ctx=layer==='base'?ctxBase:ctxLine; ctx.save(); ctx.globalCompositeOperation='source-over'; ctx.fillStyle=state.color; ctx.font=getTextFontSize()+'px "Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif'; ctx.textBaseline='top'; ctx.fillText(text,p.x,p.y); ctx.restore(); };
-    input.addEventListener('keydown',e=>{ if(e.key==='Enter'){e.preventDefault();commit();} else if(e.key==='Escape'){wrap.remove();} });
-    input.addEventListener('blur',commit);
+    const old = document.getElementById("inlineTextEditor");
+    if (old) old.remove();
+    const interactionRect = interaction.getBoundingClientRect();
+    const z = interaction.width ? interactionRect.width / interaction.width : 1;
+    const wrap = document.createElement("div");
+    wrap.id = "inlineTextEditor";
+    wrap.className = "inline-text-editor";
+    wrap.style.left = (p.x * z) + "px";
+    wrap.style.top = (p.y * z) + "px";
+    const input = document.createElement("textarea");
+    input.rows = 2;
+    input.placeholder = "文字を入力…";
+    input.autocomplete = "off";
+    input.value = "";
+    input.style.fontFamily = state.textStyle.fontFamily;
+    input.style.fontSize = Math.max(16, Math.round(getTextFontSize()*z)) + "px";
+    input.style.fontWeight = String(state.textStyle.fontWeight);
+    input.style.fontStyle = state.textStyle.italic ? "italic" : "normal";
+    const actions = document.createElement("div");
+    actions.className = "text-editor-actions";
+    const cancel = document.createElement("button"); cancel.type="button"; cancel.textContent="取消";
+    const commitBtn = document.createElement("button"); commitBtn.type="button"; commitBtn.className="commit"; commitBtn.textContent="配置";
+    actions.append(cancel, commitBtn);
+    wrap.append(input, actions);
+    stageEl.appendChild(wrap);
+    requestAnimationFrame(function(){ input.focus(); });
+
+    let closed = false;
+    const removeEditor = function(){ if(closed) return; closed=true; wrap.remove(); };
+    const commit = function(){
+      if(closed) return;
+      const raw = input.value.replace(/\r/g, "");
+      if(!raw.trim()){ removeEditor(); return; }
+      removeEditor();
+      const layer = state.activeLayer;
+      pushUndo([layer]);
+      const ctx = layer === "base" ? ctxBase : ctxLine;
+      ctx.save();
+      ctx.globalCompositeOperation="source-over"; ctx.globalAlpha=1;
+      ctx.fillStyle=state.color; ctx.font=getTextFontCss(); ctx.textBaseline="top"; ctx.textAlign=state.textStyle.align;
+      const lines = raw.split("\n");
+      const lineHeight = getTextFontSize()*1.28;
+      const x = p.x;
+      for(let i=0;i<lines.length;i++) ctx.fillText(lines[i],x,p.y+i*lineHeight);
+      if(state.textStyle.underline){
+        const maxWidth = Math.max.apply(null, lines.map(function(line){ return ctx.measureText(line).width; }));
+        let ux=x;
+        if(state.textStyle.align === "center") ux=x-maxWidth/2; else if(state.textStyle.align === "right") ux=x-maxWidth;
+        ctx.strokeStyle=state.color; ctx.lineWidth=Math.max(1,getTextFontSize()/18); ctx.beginPath(); ctx.moveTo(ux,p.y+getTextFontSize()*1.06); ctx.lineTo(ux+maxWidth,p.y+getTextFontSize()*1.06); ctx.stroke();
+      }
+      ctx.restore();
+    };
+    commitBtn.addEventListener("click", commit);
+    cancel.addEventListener("click", removeEditor);
+    input.addEventListener("keydown",function(e){
+      if(e.key === "Escape"){ e.preventDefault(); removeEditor(); return; }
+      if(e.key === "Enter" && !e.shiftKey && !e.isComposing){ e.preventDefault(); commit(); }
+    });
   }
 
   /* =========================================================
@@ -634,9 +766,14 @@ button,input{font:inherit;color:inherit}.app{height:100vh;display:flex;flex-dire
     else if (type === 'gear'){ starPath(ctx,cx,cy,w/2,h/2,8); }
   }
 
-  function drawShape(ctx, type, rect, fill, outline){
-    ctx.save(); drawShapePath(ctx,type,rect); ctx.globalCompositeOperation='source-over';
-    ctx.strokeStyle=state.color; ctx.fillStyle=state.color; ctx.lineWidth=state.lineWidth; ctx.lineJoin='round'; ctx.lineCap='round';
+  function drawShape(ctx, type, rect, fill, outline, style){
+    style = style || {};
+    ctx.save();
+    const cx = rect.x + rect.w / 2, cy = rect.y + rect.h / 2;
+    const rotation = Number(style.rotation || 0) * Math.PI / 180;
+    if (rotation) { ctx.translate(cx, cy); ctx.rotate(rotation); ctx.translate(-cx, -cy); }
+    drawShapePath(ctx,type,rect); ctx.globalCompositeOperation='source-over'; ctx.globalAlpha=style.alpha == null ? 1 : style.alpha;
+    ctx.strokeStyle=style.color || state.color; ctx.fillStyle=style.color || state.color; ctx.lineWidth=style.lineWidth || state.lineWidth; ctx.lineJoin='round'; ctx.lineCap='round';
     if (fill) ctx.fill();
     if (outline !== false) ctx.stroke();
     ctx.restore();
@@ -648,24 +785,42 @@ button,input{font:inherit;color:inherit}.app{height:100vh;display:flex;flex-dire
   }
 
   function drawSelectionOverlay(rect){
-    ctxInteraction.clearRect(0, 0, CANVAS_W, CANVAS_H);
-    if (!rect) return;
+    ctxInteraction.clearRect(0,0,CANVAS_W,CANVAS_H);
+    if(!rect) return;
     ctxInteraction.save();
-    ctxInteraction.setLineDash([6, 4]);
-    ctxInteraction.lineWidth = 1.5;
-    ctxInteraction.strokeStyle = "rgba(47,158,143,0.9)";
-    ctxInteraction.strokeRect(rect.x + 0.5, rect.y + 0.5, rect.w, rect.h);
+    ctxInteraction.setLineDash([8,5]);
+    ctxInteraction.lineWidth=2;
+    ctxInteraction.strokeStyle="rgba(103,124,245,.95)";
+    ctxInteraction.strokeRect(rect.x+.5,rect.y+.5,rect.w,rect.h);
+    ctxInteraction.setLineDash([]);
+    ctxInteraction.fillStyle="rgba(255,255,255,.96)";
+    ctxInteraction.strokeStyle="rgba(103,124,245,.95)";
+    const hs=8;
+    [[rect.x,rect.y],[rect.x+rect.w,rect.y],[rect.x,rect.y+rect.h],[rect.x+rect.w,rect.y+rect.h]].forEach(function(pt){ctxInteraction.beginPath();ctxInteraction.arc(pt[0],pt[1],hs/2,0,Math.PI*2);ctxInteraction.fill();ctxInteraction.stroke();});
+    const shape=state.selectedShape;
+    if(shape){
+      const h=getRotationHandlePoint(shape);
+      ctxInteraction.beginPath();ctxInteraction.moveTo(rect.x+rect.w/2,rect.y);ctxInteraction.lineTo(h.x,h.y);ctxInteraction.strokeStyle="rgba(103,124,245,.7)";ctxInteraction.stroke();
+      ctxInteraction.beginPath();ctxInteraction.arc(h.x,h.y,6,0,Math.PI*2);ctxInteraction.fillStyle="#fff";ctxInteraction.fill();ctxInteraction.strokeStyle="#7180ff";ctxInteraction.stroke();
+    }
     ctxInteraction.restore();
   }
 
+  function pointInRotatedShape(point,item){
+    const r=item.rect, cx=r.x+r.w/2, cy=r.y+r.h/2, rad=-(Number(item.rotation||0)*Math.PI/180);
+    const dx=point.x-cx,dy=point.y-cy,rx=dx*Math.cos(rad)-dy*Math.sin(rad),ry=dx*Math.sin(rad)+dy*Math.cos(rad);
+    return Math.abs(rx)<=r.w/2 && Math.abs(ry)<=r.h/2;
+  }
   function findShapeAt(point){
-    for (let i = state.shapeObjects.length - 1; i >= 0; i--){
-      const item = state.shapeObjects[i];
-      const r = item.rect;
-      if (point.x >= r.x && point.x <= r.x + r.w && point.y >= r.y && point.y <= r.y + r.h) return item;
-    }
+    for(let i=state.shapeObjects.length-1;i>=0;i--){ if(pointInRotatedShape(point,state.shapeObjects[i])) return state.shapeObjects[i]; }
     return null;
   }
+  function getRotationHandlePoint(item){
+    const r=item.rect,cx=r.x+r.w/2,cy=r.y+r.h/2,rad=(Number(item.rotation||0)-90)*Math.PI/180;
+    const d=Math.max(24,Math.min(r.w,r.h)*0.16+14);
+    return {x:cx+Math.cos(rad)*(r.h/2+d),y:cy+Math.sin(rad)*(r.h/2+d)};
+  }
+  function rotationHandleHit(point,item){ const h=getRotationHandlePoint(item); return Math.hypot(point.x-h.x,point.y-h.y)<=12; }
 
   function drawSelectionPreview(start, current){
     const rect = normalizeRect(start, current);
@@ -686,19 +841,22 @@ button,input{font:inherit;color:inherit}.app{height:100vh;display:flex;flex-dire
     updateSelectionButtons();
   }
 
+  function redrawShapeLayer(){
+    ctxShapes.clearRect(0,0,CANVAS_W,CANVAS_H);
+    state.shapeObjects.forEach(function(item){
+      drawShape(ctxShapes,item.type,item.rect,item.fill,item.outline,item.style);
+    });
+  }
+
   function deleteSelectedShape(){
     const shape = state.selectedShape;
     if (!shape) return false;
-    const layer = shape.layer || state.activeLayer;
-    const ctx = layer === "base" ? ctxBase : ctxLine;
-    pushUndo([layer]);
-    ctx.clearRect(shape.rect.x - state.lineWidth - 2, shape.rect.y - state.lineWidth - 2, shape.rect.w + state.lineWidth * 2 + 4, shape.rect.h + state.lineWidth * 2 + 4);
+    pushUndo(["shapes"]);
     state.shapeObjects = state.shapeObjects.filter(function(item){ return item !== shape; });
+    redrawShapeLayer();
     state.selectedShape = null;
     deselect();
-    state.shapeObjects.filter(function(item){ return item.layer === layer; }).forEach(function(item){
-      drawShape(ctx, item.type, item.rect, item.fill, item.outline);
-    });
+    updateShapeEditUI();
     return true;
   }
 
@@ -745,10 +903,6 @@ button,input{font:inherit;color:inherit}.app{height:100vh;display:flex;flex-dire
       floodFill(activeCtx(), Math.round(p.x), Math.round(p.y), state.color);
       return;
     }
-    if (state.tool === "text"){
-      placeTextAt(p);
-      return;
-    }
     if (state.tool === "shape"){
       interaction.setPointerCapture(e.pointerId);
       state.shaping = true;
@@ -757,12 +911,16 @@ button,input{font:inherit;color:inherit}.app{height:100vh;display:flex;flex-dire
       return;
     }
     if (state.tool === "select"){
+      const selected=state.selectedShape;
       interaction.setPointerCapture(e.pointerId);
-      state.selecting = true;
-      state.selectionMoved = false;
-      state.selectionStart = p;
-      ctxInteraction.clearRect(0, 0, CANVAS_W, CANVAS_H);
-      return;
+      if(selected && rotationHandleHit(p,selected)){
+        pushUndo(["shapes"]); state.shapeTransforming={type:"rotate",shape:selected,startAngle:Math.atan2(p.y-(selected.rect.y+selected.rect.h/2),p.x-(selected.rect.x+selected.rect.w/2))*180/Math.PI,baseRotation:Number(selected.rotation||0)}; return;
+      }
+      if(selected && pointInRotatedShape(p,selected)){
+        pushUndo(["shapes"]); state.shapeTransforming={type:"move",shape:selected,startX:p.x,startY:p.y,baseX:selected.rect.x,baseY:selected.rect.y}; return;
+      }
+      state.selectedShape=null; state.selectionRect=null; updateShapeEditUI();
+      state.selecting=true; state.selectionMoved=false; state.selectionStart=p; ctxInteraction.clearRect(0,0,CANVAS_W,CANVAS_H); return;
     }
 
     interaction.setPointerCapture(e.pointerId);
@@ -774,11 +932,21 @@ button,input{font:inherit;color:inherit}.app{height:100vh;display:flex;flex-dire
   function onPointerMove(e){
     updateBrushCursor(e);
 
+    if (state.tool === "select" && state.shapeTransforming){
+      const p=getPos(e), tr=state.shapeTransforming, shape=tr.shape;
+      if(tr.type==="move"){
+        shape.rect.x=clamp(tr.baseX+(p.x-tr.startX),0,Math.max(0,CANVAS_W-shape.rect.w));
+        shape.rect.y=clamp(tr.baseY+(p.y-tr.startY),0,Math.max(0,CANVAS_H-shape.rect.h));
+      } else {
+        const cx=shape.rect.x+shape.rect.w/2,cy=shape.rect.y+shape.rect.h/2;
+        const a=Math.atan2(p.y-cy,p.x-cx)*180/Math.PI;
+        let delta=a-tr.startAngle; while(delta>180)delta-=360; while(delta<-180)delta+=360;
+        shape.rotation=clamp(tr.baseRotation+delta,-180,180); shape.style=Object.assign({},shape.style||{},{rotation:shape.rotation});
+      }
+      redrawShapeLayer(); state.selectionRect=shape.rect; drawSelectionOverlay(shape.rect); updateShapeEditUI(); return;
+    }
     if (state.tool === "select" && state.selecting){
-      const p = getPos(e);
-      state.selectionMoved = true;
-      drawSelectionPreview(state.selectionStart, p);
-      return;
+      const p=getPos(e); state.selectionMoved=true; drawSelectionPreview(state.selectionStart,p); return;
     }
     if (state.tool === "shape" && state.shaping){
       const p = getPos(e);
@@ -794,15 +962,18 @@ button,input{font:inherit;color:inherit}.app{height:100vh;display:flex;flex-dire
   }
 
   function onPointerUp(e){
+    if(state.tool==="select" && state.shapeTransforming){
+      state.shapeTransforming=null; try{interaction.releasePointerCapture(e.pointerId);}catch(err){} redrawShapeLayer(); updateShapeEditUI(); updateSelectionButtons(); return;
+    }
     if (state.tool === "shape" && state.shaping){
       state.shaping = false;
       try{ interaction.releasePointerCapture(e.pointerId); }catch(err){}
       ctxInteraction.clearRect(0, 0, CANVAS_W, CANVAS_H);
       const rect = normalizeRect(state.shapeStart, getPos(e));
       if (rect.w > 3 && rect.h > 3){
-        pushUndo([state.activeLayer]);
-        drawShape(activeCtx(), state.shapeType, rect, state.shapeFill, state.shapeOutline);
-        state.shapeObjects.push({rect:rect,type:state.shapeType,fill:state.shapeFill,outline:state.shapeOutline,layer:state.activeLayer});
+        pushUndo(["shapes"]);
+        drawShape(ctxShapes, state.shapeType, rect, state.shapeFill, state.shapeOutline, {color:state.color,lineWidth:state.lineWidth,alpha:1});
+        state.shapeObjects.push({rect:rect,type:state.shapeType,fill:state.shapeFill,outline:state.shapeOutline,layer:"shapes",style:{color:state.color,lineWidth:state.lineWidth,alpha:1,rotation:0},rotation:0});
       }
       state.shapeStart = null;
       return;
@@ -810,7 +981,8 @@ button,input{font:inherit;color:inherit}.app{height:100vh;display:flex;flex-dire
     if (state.tool === "select" && state.selecting){
       state.selecting = false;
       try{ interaction.releasePointerCapture(e.pointerId); }catch(err){}
-      if (!state.selectionMoved){
+      const dragRect = normalizeRect(state.selectionStart, getPos(e));
+      if (dragRect.w < 3 && dragRect.h < 3){
         const hit = findShapeAt(getPos(e));
         if (hit){
           state.selectedShape = hit;
@@ -821,10 +993,12 @@ button,input{font:inherit;color:inherit}.app{height:100vh;display:flex;flex-dire
           shapeFillToggle.checked = hit.fill;
           shapeOutlineToggle.checked = hit.outline;
           drawSelectionOverlay(hit.rect);
-          shapePanel.hidden = false;
+          updateShapeEditUI();
+          shapePanel.hidden = true;
         } else {
           state.selectedShape = null;
           deselect();
+          updateShapeEditUI();
         }
       }
       updateSelectionButtons();
@@ -870,11 +1044,33 @@ button,input{font:inherit;color:inherit}.app{height:100vh;display:flex;flex-dire
   });
   interaction.addEventListener("pointerleave", function(){ brushCursorEl.style.display = "none"; });
 
+  function updateShapeEditUI(){
+    const shape=state.selectedShape; const show=!!shape;
+    shapeSelectionControls.hidden=!show;
+    if(!shape) return;
+    shapeXInput.value=String(Math.round(shape.rect.x));
+    shapeYInput.value=String(Math.round(shape.rect.y));
+    shapeWidthInput.value=String(Math.round(shape.rect.w));
+    shapeHeightInput.value=String(Math.round(shape.rect.h));
+    shapeRotationInput.value=String(Math.round(shape.rotation||0));
+  }
+
+  function updateSelectedShape(){
+    const shape=state.selectedShape; if(!shape) return;
+    const w=clamp(Number(shapeWidthInput.value)||shape.rect.w,4,4096);
+    const h=clamp(Number(shapeHeightInput.value)||shape.rect.h,4,4096);
+    const x=clamp(Number(shapeXInput.value)||0,0,Math.max(0,CANVAS_W-w));
+    const y=clamp(Number(shapeYInput.value)||0,0,Math.max(0,CANVAS_H-h));
+    const rotation=clamp(Number(shapeRotationInput.value)||0,-180,180);
+    shape.rect={x,y,w,h}; shape.rotation=rotation; shape.style=Object.assign({},shape.style||{},{rotation:rotation});
+    redrawShapeLayer(); state.selectionRect=shape.rect; drawSelectionOverlay(shape.rect); updateShapeEditUI(); updateSelectionButtons();
+  }
+
   /* =========================================================
      ツール切り替え
   ========================================================= */
   function updateInteractionCursor(){
-    const map = { pen:"none", eraser:"none", eyedropper:"crosshair", fill:"pointer", shape:"crosshair", select:"crosshair", text:"text" };
+    const map = { pen:"none", eraser:"none", eyedropper:"crosshair", fill:"pointer", shape:"crosshair", select:"default" };
     interaction.style.cursor = map[state.tool] || "default";
   }
 
@@ -885,26 +1081,23 @@ button,input{font:inherit;color:inherit}.app{height:100vh;display:flex;flex-dire
   }
 
   function updateOptionsBarRelevance(){
-    setGroupRelevance(colorOptGroup, ["pen","fill","shape","text"].indexOf(state.tool) !== -1);
-    setGroupRelevance(widthOptGroup, ["pen","eraser","shape","text"].indexOf(state.tool) !== -1);
+    setGroupRelevance(colorOptGroup, ["pen","fill","shape"].indexOf(state.tool) !== -1);
+    setGroupRelevance(widthOptGroup, ["pen","eraser","shape"].indexOf(state.tool) !== -1);
     setGroupRelevance(aiOptGroup, state.tool === "pen");
   }
 
   function selectTool(name){
-    const wasSameTool = state.tool === name;
     state.tool = name;
-    document.querySelectorAll(".tool-icon-btn").forEach(function(b){
-      b.classList.toggle("active", b.dataset.tool === name);
-    });
+    document.querySelectorAll(".tool-icon-btn").forEach(function(b){ b.classList.toggle("active", b.dataset.tool === name); });
     const isBrushTool = (name === "pen" || name === "eraser");
-    shapePanel.hidden = name !== "shape" || wasSameTool;
+    savePanel.hidden = true;
+    shapePanel.hidden = name !== "shape";
+    if(name !== "select"){ state.shapeTransforming=null; state.selectedShape=null; state.selectionRect=null; ctxInteraction.clearRect(0,0,CANVAS_W,CANVAS_H); }
+    updateShapeEditUI();
+    brushStyleGroup.style.display = isBrushTool ? "flex" : "none";
     brushCursorEl.classList.toggle("eraser-cursor", name === "eraser");
     if (!isBrushTool) brushCursorEl.style.display = "none";
-    updateInteractionCursor();
-    updateWidthLabelForTool();
-    updateWidthPreview();
-    updateOptionsBarRelevance();
-    updateStatusBar();
+    updateInteractionCursor(); updateWidthLabelForTool(); updateWidthPreview(); updateOptionsBarRelevance(); updateStatusBar();
   }
 
   document.querySelectorAll(".tool-icon-btn").forEach(function(btn){
@@ -915,6 +1108,7 @@ button,input{font:inherit;color:inherit}.app{height:100vh;display:flex;flex-dire
   shapeFillToggle.addEventListener("change", function(e){ state.shapeFill = e.target.checked; });
   shapeOutlineToggle.addEventListener("change", function(e){ state.shapeOutline = e.target.checked; });
   shapePanelClose.addEventListener("click", function(){ shapePanel.hidden = true; });
+  [shapeXInput,shapeYInput,shapeWidthInput,shapeHeightInput,shapeRotationInput].forEach(function(el){ el.addEventListener("change", function(){ if(state.selectedShape){ pushUndo(["shapes"]); updateSelectedShape(); } }); });
   document.addEventListener("pointerdown", function(e){
     if (shapePanel.hidden) return;
     if (!shapePanel.contains(e.target) && !e.target.closest('[data-tool="shape"]')) shapePanel.hidden = true;
@@ -938,21 +1132,43 @@ button,input{font:inherit;color:inherit}.app{height:100vh;display:flex;flex-dire
   }
 
   function updateWidthLabelForTool(){
-    if (state.tool === "text"){
-      widthLabelEl.textContent = "文字サイズ";
-      widthValueLabel.textContent = getTextFontSize() + "px";
-    } else {
+    {
       widthLabelEl.textContent = "線の太さ";
       widthValueLabel.textContent = state.lineWidth + "px";
     }
   }
 
+  function rgbToHsl(hex){
+    const v=hex.replace("#","");
+    let r=parseInt(v.slice(0,2),16)/255,g=parseInt(v.slice(2,4),16)/255,b=parseInt(v.slice(4,6),16)/255;
+    const max=Math.max(r,g,b),min=Math.min(r,g,b); let h=0,s=0,l=(max+min)/2;
+    if(max!==min){
+      const d=max-min; s=l>0.5?d/(2-max-min):d/(max+min);
+      switch(max){case r:h=((g-b)/d+(g<b?6:0))/6;break;case g:h=((b-r)/d+2)/6;break;default:h=((r-g)/d+4)/6;}
+    }
+    return {h:Math.round(h*360),s:Math.round(s*100),l:Math.round(l*100)};
+  }
+  function hslToHex(h,s,l){
+    h=((h%360)+360)%360/360; s=clamp(s,0,100)/100; l=clamp(l,0,100)/100;
+    if(s===0){const v=Math.round(l*255).toString(16).padStart(2,"0"); return "#"+v+v+v;}
+    const q=l<0.5?l*(1+s):l+s-l*s,p=2*l-q;
+    const hue2rgb=(t)=>{if(t<0)t+=1;if(t>1)t-=1;if(t<1/6)return p+(q-p)*6*t;if(t<1/2)return q;if(t<2/3)return p+(q-p)*(2/3-t)*6;return p;};
+    const r=Math.round(hue2rgb(h+1/3)*255),g=Math.round(hue2rgb(h)*255),b=Math.round(hue2rgb(h-1/3)*255);
+    return "#"+[r,g,b].map(v=>v.toString(16).padStart(2,"0")).join("");
+  }
+  function applyColorAdjustments(){
+    const c=hslToHex(state.colorHsl.h,Number(saturationInput.value),Number(lightnessInput.value));
+    state.color=c; colorInput.value=c; colorHexLabel.textContent=c.toLowerCase();
+    saturationValue.textContent=String(Math.round(Number(saturationInput.value)));
+    lightnessValue.textContent=String(Math.round(Number(lightnessInput.value)));
+    updateWidthPreview(); highlightActiveSwatch();
+  }
   function setColor(hex){
-    state.color = hex;
-    colorInput.value = hex;
-    colorHexLabel.textContent = hex.toLowerCase();
-    updateWidthPreview();
-    highlightActiveSwatch();
+    const hsl=rgbToHsl(hex); state.colorHsl=hsl;
+    saturationInput.value=String(hsl.s); lightnessInput.value=String(hsl.l);
+    state.color=hex; colorInput.value=hex; colorHexLabel.textContent=hex.toLowerCase();
+    saturationValue.textContent=String(hsl.s); lightnessValue.textContent=String(hsl.l);
+    updateWidthPreview(); highlightActiveSwatch();
   }
 
   function highlightActiveSwatch(){
@@ -962,6 +1178,8 @@ button,input{font:inherit;color:inherit}.app{height:100vh;display:flex;flex-dire
   }
 
   colorInput.addEventListener("input", function(e){ setColor(e.target.value); });
+  saturationInput.addEventListener("input", applyColorAdjustments);
+  lightnessInput.addEventListener("input", applyColorAdjustments);
 
   document.querySelectorAll(".swatch").forEach(function(sw){
     sw.addEventListener("click", function(){ setColor(sw.dataset.color); });
@@ -971,6 +1189,12 @@ button,input{font:inherit;color:inherit}.app{height:100vh;display:flex;flex-dire
     state.lineWidth = Number(e.target.value);
     updateWidthLabelForTool();
     updateWidthPreview();
+  });
+
+  brushStyleInput.addEventListener("change", function(e){ state.brushStyle = e.target.value === "brush" ? "brush" : "pencil"; });
+  themeToggle.addEventListener("click", function(){
+    const dark = !document.body.classList.contains("dark");
+    document.body.classList.toggle("dark", dark); themeToggle.textContent = dark ? "☀" : "☾"; themeToggle.setAttribute("aria-pressed", String(dark));
   });
 
   /* =========================================================
@@ -1012,37 +1236,20 @@ button,input{font:inherit;color:inherit}.app{height:100vh;display:flex;flex-dire
   }
 
   function resizeCanvas(newWidth, newHeight){
-    newWidth = clamp(Math.round(newWidth), 64, 4096);
-    newHeight = clamp(Math.round(newHeight), 64, 4096);
-    if (newWidth === CANVAS_W && newHeight === CANVAS_H) return;
-
-    pushUndo(["base", "line"]);
-    const oldWidth = CANVAS_W;
-    const oldHeight = CANVAS_H;
-    const snapshots = [canvasBase, canvasLine].map(function(canvas){
-      const temp = document.createElement("canvas");
-      temp.width = oldWidth;
-      temp.height = oldHeight;
-      temp.getContext("2d").drawImage(canvas, 0, 0);
-      return temp;
+    newWidth = clamp(Math.round(newWidth), 64, 4096); newHeight = clamp(Math.round(newHeight), 64, 4096);
+    if (newWidth === CANVAS_W && newHeight === CANVAS_H) { requestAnimationFrame(fitCanvasToView); return; }
+    pushUndo(["base","line","shapes"]);
+    const oldWidth = CANVAS_W, oldHeight = CANVAS_H;
+    const snapshots = [canvasBase,canvasLine,canvasShapes].map(function(canvas){ const temp=document.createElement("canvas"); temp.width=oldWidth; temp.height=oldHeight; temp.getContext("2d").drawImage(canvas,0,0); return temp; });
+    const sx = newWidth/oldWidth, sy = newHeight/oldHeight;
+    CANVAS_W=newWidth; CANVAS_H=newHeight;
+    [canvasBase,canvasLine,canvasShapes,interaction].forEach(function(canvas){ canvas.width=CANVAS_W; canvas.height=CANVAS_H; });
+    snapshots.forEach(function(temp,index){
+      const ctx=index===0?ctxBase:(index===1?ctxLine:ctxShapes); ctx.drawImage(temp,0,0,oldWidth,oldHeight,0,0,CANVAS_W,CANVAS_H);
     });
-
-    CANVAS_W = newWidth;
-    CANVAS_H = newHeight;
-    [canvasBase, canvasLine, interaction].forEach(function(canvas){
-      canvas.width = CANVAS_W;
-      canvas.height = CANVAS_H;
-    });
-    snapshots.forEach(function(temp, index){
-      const ctx = index === 0 ? ctxBase : ctxLine;
-      ctx.drawImage(temp, 0, 0, oldWidth, oldHeight, 0, 0, CANVAS_W, CANVAS_H);
-    });
-    state.selectionRect = null;
-    syncSizeInputs();
-    updateStatusBar();
-    applyZoom();
-    selectSizePreset(CANVAS_W, CANVAS_H);
-    updateUndoRedoButtons();
+    state.shapeObjects.forEach(function(item){ item.rect={x:item.rect.x*sx,y:item.rect.y*sy,w:item.rect.w*sx,h:item.rect.h*sy}; if(item.style) item.style.lineWidth*=Math.min(sx,sy); });
+    state.selectionRect=null; state.selectedShape=null; savePanel.hidden=true; syncSizeInputs(); updateStatusBar(); selectSizePreset(CANVAS_W,CANVAS_H); updateUndoRedoButtons(); userZoomed=false; requestAnimationFrame(fitCanvasToView);
+    fitCanvasToView();
   }
 
   function closeSizePanel(){
@@ -1110,57 +1317,45 @@ button,input{font:inherit;color:inherit}.app{height:100vh;display:flex;flex-dire
   redoBtn.addEventListener("click", redo);
 
   flipBtn.addEventListener("click", function(){
-    pushUndo(["base", "line"]);
-    flipCanvasHorizontal(ctxBase);
-    flipCanvasHorizontal(ctxLine);
+    pushUndo(["base","line","shapes"]);
+    flipCanvasHorizontal(ctxBase); flipCanvasHorizontal(ctxLine); flipCanvasHorizontal(ctxShapes);
+    state.shapeObjects.forEach(function(item){ item.rect.x = CANVAS_W - item.rect.x - item.rect.w; });
     if (state.selectionRect) deselect();
   });
 
+  function getExportRect(mode){
+    if(mode === "selection" && state.selectionRect && state.selectionRect.w > 1 && state.selectionRect.h > 1) return state.selectionRect;
+    if(mode === "custom" && state.selectionRect && state.selectionRect.w > 1 && state.selectionRect.h > 1) return state.selectionRect;
+    return {x:0,y:0,w:CANVAS_W,h:CANVAS_H};
+  }
+  function downloadCurrentSave(){
+    const r=getExportRect(state.saveMode);
+    const exportCanvas=document.createElement("canvas");
+    exportCanvas.width=Math.max(1,Math.round(r.w)); exportCanvas.height=Math.max(1,Math.round(r.h));
+    const ex=exportCanvas.getContext("2d");
+    ex.drawImage(canvasBase,r.x,r.y,r.w,r.h,0,0,r.w,r.h);
+    ex.drawImage(canvasLine,r.x,r.y,r.w,r.h,0,0,r.w,r.h);
+    ex.drawImage(canvasShapes,r.x,r.y,r.w,r.h,0,0,r.w,r.h);
+    const url=exportCanvas.toDataURL("image/png");
+    const stamp=new Date().toISOString().slice(0,19).replace(/[:T]/g,"-");
+    const a=document.createElement("a"); a.href=url; a.download="snapink-"+stamp+"-"+Math.round(r.w)+"x"+Math.round(r.h)+".png"; document.body.appendChild(a); a.click(); a.remove();
+    savePanel.hidden=true; deselect();
+  }
   saveBtn.addEventListener("click", function(){
-    const exportCanvas = document.createElement("canvas");
-    exportCanvas.width = CANVAS_W;
-    exportCanvas.height = CANVAS_H;
-    const ex = exportCanvas.getContext("2d");
-    if (state.layers.base.visible) ex.drawImage(canvasBase, 0, 0);
-    if (state.layers.line.visible) ex.drawImage(canvasLine, 0, 0);
-
-    const url = exportCanvas.toDataURL("image/png");
-    const stamp = new Date().toISOString().slice(0, 19).replace(/[:T]/g, "-");
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "snapink-" + stamp + ".png";
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
+    sizePanel.hidden=true;
+    shapePanel.hidden=true;
+    savePanel.hidden=!savePanel.hidden;
+    savePanel.querySelectorAll(".save-option").forEach(function(b){ b.classList.toggle("active", b.dataset.saveMode===state.saveMode); });
   });
-
-  /* =========================================================
-     参照画像パネル
-  ========================================================= */
-  refLoadBtn.addEventListener("click", function(){ refInput.click(); });
-
-  refInput.addEventListener("change", function(e){
-    const file = e.target.files && e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = function(ev){
-      refImage.src = ev.target.result;
-      refImage.style.display = "block";
-      refPlaceholder.style.display = "none";
-      refClearBtn.disabled = false;
-      refFileName.textContent = file.name;
-    };
-    reader.readAsDataURL(file);
+  savePanelClose.addEventListener("click", function(){ savePanel.hidden=true; });
+  savePanel.querySelectorAll(".save-option").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      state.saveMode=btn.dataset.saveMode;
+      savePanel.querySelectorAll(".save-option").forEach(function(b){ b.classList.toggle("active", b===btn); });
+      if(state.saveMode === "custom"){ savePanel.hidden=true; selectTool("select"); statusBarEl.textContent="保存範囲をドラッグで指定してください"; }
+    });
   });
-
-  refClearBtn.addEventListener("click", function(){
-    refImage.src = "";
-    refImage.style.display = "none";
-    refPlaceholder.style.display = "block";
-    refClearBtn.disabled = true;
-    refFileName.textContent = "";
-    refInput.value = "";
-  });
+  saveDownloadBtn.addEventListener("click", downloadCurrentSave);
 
   /* =========================================================
      AI補正設定（ツールオプションバーの簡易トグルと同期）
@@ -1205,27 +1400,48 @@ button,input{font:inherit;color:inherit}.app{height:100vh;display:flex;flex-dire
       if (state.selectionRect) deselect();
       return;
     }
-    const toolMap = { p:"pen", e:"eraser", i:"eyedropper", g:"fill", s:"shape", r:"select", t:"text" };
+    const toolMap = { p:"pen", e:"eraser", i:"eyedropper", g:"fill", s:"shape", r:"select" };
     if (toolMap[key]) selectTool(toolMap[key]);
   });
 
   /* =========================================================
-     起動
+     起動 / ズーム（CSSサイズのみを変更。transformを使わないので低ズームでも座標が正確）
   ========================================================= */
   let applyZoom = function(){};
+  let userZoomed = false;
+  const zoomInput=document.getElementById('zoomInput');
+  const zoomValue=document.getElementById('zoomValue');
+  const stageWrap=document.getElementById('stageWrap');
+  function applyZoomNow(){
+    const z=clamp(Number(zoomInput.value)/100,0.15,2);
+    const displayW=CANVAS_W*z, displayH=CANVAS_H*z;
+    stageWrap.style.width=displayW+'px'; stageWrap.style.height=displayH+'px';
+    stageEl.style.width=displayW+'px'; stageEl.style.height=displayH+'px';
+    stageEl.style.transform='none';
+    zoomValue.textContent=Math.round(z*100)+'%';
+    applyZoom=applyZoomNow;
+    document.querySelectorAll('.inline-text-editor').forEach(function(editor){ editor.remove(); });
+  }
+  function fitCanvasToView(){
+    const rect=canvasArea.getBoundingClientRect();
+    const pad=18;
+    const maxW=Math.max(80,rect.width-pad*2), maxH=Math.max(80,rect.height-pad*2);
+    const z=Math.min(maxW/CANVAS_W,maxH/CANVAS_H,1);
+    zoomInput.value=String(Math.max(15,Math.round(z*100)));
+    applyZoomNow();
+  }
+  zoomInput.min='15';
+  zoomInput.addEventListener('input',function(){ userZoomed=true; applyZoomNow(); });
+  window.addEventListener('resize',function(){ if(!userZoomed) fitCanvasToView(); });
+  if(window.visualViewport) window.visualViewport.addEventListener('resize',function(){ if(!userZoomed) fitCanvasToView(); });
+
   init();
-  (function(){
-    const zoomInput=document.getElementById('zoomInput');
-    const zoomValue=document.getElementById('zoomValue');
-    const stageWrap=document.getElementById('stageWrap');
-    applyZoom = function(){ const z=Number(zoomInput.value)/100; stageWrap.style.width=(CANVAS_W*z)+'px'; stageWrap.style.height=(CANVAS_H*z)+'px'; stageEl.style.width=CANVAS_W+'px'; stageEl.style.height=CANVAS_H+'px'; stageEl.style.transform='scale('+z+')'; stageEl.style.transformOrigin='top left'; zoomValue.textContent=Math.round(z*100)+'%'; };
-    zoomInput.addEventListener('input',applyZoom); applyZoom();
-  })();
+  themeToggle.textContent = document.body.classList.contains("dark") ? "☀" : "☾";
+  requestAnimationFrame(function(){ fitCanvasToView(); });
 
 
 })();
 </script>
 
 
-<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v31edd6df95cf4e85bb4c19e7a9bdbcba1788362987495" integrity="sha512-iIg7k2xntmwu6/uSb5tpc/hySgZc4eoL31yB29W6tJFo2akwjPWcEqnCEdJvGexCL0KEQwVYv5BlowfhVz26hg==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","spa":2}' crossorigin="anonymous"></script>
 </body></html>
