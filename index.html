@@ -1579,4 +1579,4 @@ body.dark .mobile-actions{background:rgba(25,34,55,.55)}
 </script>
 
 
-<script>if ("serviceWorker" in navigator) { window.addEventListener("load", () => { navigator.serviceWorker.register("./sw.js").catch(err => console.warn("Service Worker registration failed:", err)); }); }</script></body></html>
+<script>if ("serviceWorker" in navigator) { window.addEventListener("load", () => { navigator.serviceWorker.register("./sw.js", { updateViaCache: "none" }).catch(err => console.warn("Service Worker registration failed:", err)); }); }</script></body></html>
